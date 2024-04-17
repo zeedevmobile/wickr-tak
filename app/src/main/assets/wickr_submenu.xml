@@ -1,0 +1,10 @@
+<menu buttonRadius='65' buttonSpan='32.73' buttonWidth='45' buttonBg='bgs/button.xml'>
+    <button icon='icons/phone_icon.png'
+        onClick='wickr_phone.xml' />
+
+    <button icon='icons/chatsmall.png'
+        onClick='wickr_chat.xml' />
+
+    <button icon='file_upload_white.png'
+        onClick="wickr_file.xml" />
+</menu>

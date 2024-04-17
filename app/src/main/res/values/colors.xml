@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <!-- COMMON -->
+    <color name="white">#ffffff</color>
+    <color name="darker_gray">#121212</color>
+    <color name="teal">#008080</color>
+    <color name="purple">#6a0dad</color>
+    <!-- LED -->
+
+    <!-- PRESET -->
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+
+    <color name="color_accent">#F39200</color>
+    <color name="send_button_inactive">#6C6C6C</color>
+    <color name="message_background_inbox">#3B3B3B</color>
+    <color name="message_background_outbox">#6C6C6C</color>
+    <color name="user_avatar_border_color">#DBDBDB</color>
+
+    <color name="light_blue">#33b5e5</color>
+    <color name="light_gray">#cccccc</color>
+    <color name="red">#FF0000</color>
+</resources>

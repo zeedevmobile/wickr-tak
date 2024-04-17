@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/createTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/create_group"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <EditText
+            android:id="@+id/titleInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/title_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/createTitle" />
+
+        <EditText
+            android:id="@+id/descriptionInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/description_label"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleInputLayout" />
+
+
+        <TextView
+            android:id="@+id/expirationLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:minHeight="44dp"
+            android:gravity="center_vertical"
+            android:text="@string/expiration_label"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toStartOf="@id/expirationTime"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/descriptionInputLayout" />
+
+        <com.atakmap.android.gui.PluginSpinner
+            android:id="@+id/expirationTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"
+            android:gravity="center_vertical|end"
+            android:entries="@array/expiration_options"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/expirationLabel"
+            app:layout_constraintBottom_toBottomOf="@id/expirationLabel"/>
+
+        <TextView
+            android:id="@+id/borLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:minHeight="44dp"
+            android:gravity="center_vertical"
+            android:layout_marginEnd="16dp"
+            android:text="@string/bor_label"
+            app:layout_constraintEnd_toStartOf="@id/borTime"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/expirationLabel" />
+
+        <com.atakmap.android.gui.PluginSpinner
+            android:id="@+id/borTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"
+            android:gravity="center_vertical|end"
+            android:entries="@array/burnOnRead_options"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/borLabel"
+            app:layout_constraintBottom_toBottomOf="@id/borLabel"/>
+
+        <TextView
+            android:id="@+id/enableModerationLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:minHeight="44dp"
+            android:gravity="center_vertical"
+            android:layout_marginEnd="16dp"
+            android:text="@string/enable_moderation"
+            app:layout_constraintEnd_toStartOf="@id/enableModerationSwitch"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/borLabel" />
+
+        <Switch
+            android:id="@+id/enableModerationSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/enableModerationLabel"
+            app:layout_constraintBottom_toBottomOf="@id/enableModerationLabel" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="20dp"
+            android:gravity="center_horizontal"
+            app:layout_constraintTop_toBottomOf="@id/enableModerationSwitch"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <Button
+                android:id="@+id/okBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="10dp"
+                android:minHeight="48dp"
+                android:text="@string/create_group"
+                android:textColor="@color/white"
+                android:background="@drawable/btn_gray" />
+            <Space
+                android:layout_width="40dp"
+                android:layout_height="0dp" />
+            <Button
+                android:layout_width="75dp"
+                android:theme="@style/darkButton"
+                android:layout_height="wrap_content"
+                android:text="@string/cancel"
+                android:textColor="@color/white"
+                android:background="@drawable/btn_gray"
+                android:minHeight="48dp"
+                android:id="@+id/cancelBtn"/>
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

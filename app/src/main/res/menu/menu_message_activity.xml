@@ -1,0 +1,71 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.wickr.android.api.MainActivity">
+
+    <item
+        android:id="@+id/start_call"
+        android:orderInCategory="1"
+        android:title="Start Call"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/send_location"
+        android:orderInCategory="2"
+        android:title="Send Location"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/choose_photo"
+        android:orderInCategory="100"
+        android:title="Choose Photo"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/choose_video"
+        android:orderInCategory="100"
+        android:title="Choose Video"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/choose_file"
+        android:orderInCategory="100"
+        android:title="Choose File"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/edit_convo_info"
+        android:orderInCategory="100"
+        android:title="Edit Conversation Information"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/edit_convo_membership"
+        android:orderInCategory="100"
+        android:title="Edit Conversation Members"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/edit_convo_moderators"
+        android:orderInCategory="100"
+        android:title="Edit Conversation Moderators"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/delete_convo"
+        android:orderInCategory="100"
+        android:title="Delete convo"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/leave_convo"
+        android:orderInCategory="100"
+        android:title="Leave convo"
+        android:visible="false"
+        app:showAsAction="never" />
+</menu>

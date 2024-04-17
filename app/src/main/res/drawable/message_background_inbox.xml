@@ -1,0 +1,6 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid
+        android:color="@color/message_background_inbox" />
+    <corners android:radius="18dp" />
+</shape>

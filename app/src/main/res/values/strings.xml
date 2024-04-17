@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="app_name">Wickr ATAK Plugin</string>
+    <!-- Version -->
+    <string name="app_version">0.98-BETA</string>
+    <string name="app_version_title">Plugin App Version</string>
+    <!-- Preferences -->
+    <string name="preferences_title">Wickr Preferences</string>
+    <string name="preferences_summary">Control select Wickr preferences from within the plugin</string>
+    <!-- Pairing -->
+    <string name="pairing_requested">Pairing Requested</string>
+    <string name="pairing_complete">Pairing Complete</string>
+    <string name="syncing">Syncing with Wickr</string>
+    <!-- Convo Creation -->
+    <string name="create_group">Create Group</string>
+    <string name="create_room">Create Room</string>
+    <!-- Media and Attachments -->
+    <string name="file_options">Send File Options</string>
+    <string name="photo_browser">Photo Browser</string>
+    <string name="choose_photo">Choose Photo</string>
+    <string name="video_browser">Video Browser</string>
+    <string name="choose_video">Choose Video</string>
+    <string name="file_browser">File Browser</string>
+    <string name="choose_file">Choose File</string>
+    <string name="send_file">Send File</string>
+    <string name="no_file_selected">No File Selected</string>
+    <string name="failed_send">The file did not send</string>
+    <string name="success_send">The file was sent</string>
+    <string name="hold_to_record">Hold Button Down to Record</string>
+    <string name="release_to_send">Release Button to Send</string>
+    <string name="record_start">Record</string>
+    <string name="record_stop">Stop</string>
+    <string name="record_play">Preview</string>
+    <string name="title_voice_message_ptt">Push To Talk</string>
+    <string name="send_voice_message">Send</string>
+
+    <!-- Convo Management -->
+    <string name="leave_room">Leave Room</string>
+    <string name="delete_room">Delete Room</string>
+    <string name="room_members">Room Members</string>
+    <string name="save">Save</string>
+    <string name="more_info">Tap for More Info</string>
+    <string name="moderator">Moderator</string>
+    <string name="confirm_user_delete">Remove User?</string>
+    <string name="user_delete_text">Are you sure you want to remove this user from the room?</string>
+    <!-- description -->
+    <string name="app_name_short">Wickr</string>
+    <string name="app_desc">This plugin allows users to send and recieve Wickr messages inside of the ATAK application</string>
+    <string name="pair_wickr">Pair Wickr</string>
+    <string name="unpair_wickr">Unpair Wickr</string>
+    <string name="pair_desc">Press the button below to pair the ATAK Wickr plugin with the Wickr Pro application installed on your device.</string>
+    <string name="unpair_wickr_desc">Remove the pairing between ATAK and Wickr</string>
+    <string name="create_convo_title">Create Room/Group</string>
+    <string name="cancel">Cancel</string>
+    <string name="submit">Submit</string>
+    <string name="ok">Ok</string>
+    <string name="waiting_dialog_text">Waiting for response</string>
+    <string name="loading_dialog_text">Loading</string>
+    <string name="home_tab_rooms">Rooms</string>
+    <string name="home_tab_messages">Messages</string>
+    <string name="home_tab_contacts">Contacts</string>
+    <string name="home_tab_dms">DMs</string>
+    <string name="title_label">Title</string>
+    <string name="description_label">Description</string>
+    <string name="expiration_label">Expiration Time: </string>
+    <string name="bor_label">Burn On Read:</string>
+    <string name="custom_hours">Custom %d hours</string>
+    <string name="enable_moderation">Enable Moderation:</string>
+    <string name="edit_dialog_title">Edit Conversation Info</string>
+    <string name="delete_dialog_title">Delete conversation</string>
+    <string name="leave_dialog_title">Leave conversation</string>
+    <string name="deleted_convo_dialog_title">Conversation Deleted</string>
+    <string name="delete_dialog_message">Are you sure you want to delete this conversation?</string>
+    <string name="leave_dialog_message">Are you sure you want to leave this conversation?</string>
+    <string name="deleted_convo_message">This conversation has been deleted.</string>
+    <string name="contact_search_hint">Search contact here</string>
+    <string name="no_user">This contact is not using Wickr</string>
+    <string name="failed_message_send">Failed to Send</string>
+    <string name="show_on_map">Show Location on Map</string>
+    <string name="flavor_chooser">Please Select Wickr Application Type</string>
+    <string name="enterprise">Enterprise</string>
+    <string name="ent_beta_pkg">com.wickr.enterprise.beta</string>
+    <string name="pro_beta_pkg">com.wickr.pro.beta</string>
+    <string name="ent_pkg">com.wickr.enterprise</string>
+    <string name="pro_pkg">com.wickr.pro</string>
+    <string name="aws_pkg">com.amazon.awswickr</string>
+    <string name="wickrgov_pkg">com.amazon.awswickrgov</string>
+    <string name="aws">AWS Wickr</string>
+    <string name="pro">Pro</string>
+    <string name="pro_beta">Pro Beta</string>
+    <string name="ent_beta">Enterprise Beta</string>
+    <string name="wickrgov">AWS Wickr Gov</string>
+    <string-array name="expiration_options">
+        <item>8 hours</item>
+        <item>1 day</item>
+        <item>30 days</item>
+        <item>180 days</item>
+        <item>365 days</item>
+    </string-array>
+
+    <string-array name="burnOnRead_options">
+        <item>off</item>
+        <item>5 seconds</item>
+        <item>1 minute</item>
+        <item>30 minutes</item>
+        <item>1 day</item>
+    </string-array>
+
+    <string-array name="app_flavors">
+        <item>AWS Wickr</item>
+        <!-- <item>Pro Beta</item> -->
+        <item>Enterprise</item>
+        <item>AWS Wickr Gov</item>
+        <!-- <item>Enterprise Beta</item> -->
+    </string-array>
+</resources>

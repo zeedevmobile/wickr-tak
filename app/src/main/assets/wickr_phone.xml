@@ -1,0 +1,8 @@
+<set>
+    <broadcast>
+        <action>com.atakmap.android.wickr.launch.phone</action>
+        <extras>
+            <string key='uid'>${uid}</string>
+        </extras>
+    </broadcast>
+</set>

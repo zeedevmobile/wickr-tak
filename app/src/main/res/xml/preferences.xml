@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:key="key_for_category"
+        android:title="Wickr Plugin Preferences" />
+
+
+    <com.atakmap.android.gui.PanPreference
+        android:key="wickr_plugin_version"
+        android:summary="@string/app_version"
+        android:title="@string/app_version_title" />
+<!--    <com.atakmap.android.gui.PanPreference-->
+<!--        android:key="wickr_unpair_plugin"-->
+<!--        android:summary="@string/unpair_wickr"-->
+<!--        android:title="@string/unpair_wickr_desc" />-->
+
+
+</PreferenceScreen>
+

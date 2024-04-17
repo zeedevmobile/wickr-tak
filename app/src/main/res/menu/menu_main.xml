@@ -1,0 +1,25 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.wickr.android.api.MainActivity">
+    <item
+        android:id="@+id/action_pair"
+        android:orderInCategory="100"
+        android:title="Pair with Wickr"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_notifications"
+        android:checkable="true"
+        android:checked="false"
+        android:orderInCategory="200"
+        android:title="Show Notifications"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_unpair"
+        android:orderInCategory="1000"
+        android:title="Unpair from Wickr"
+        app:showAsAction="never" />
+
+</menu>

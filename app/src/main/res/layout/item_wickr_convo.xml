@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/userImageText"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:layout_margin="3dp"
+        android:background="#FF333333"
+        app:layout_constraintBottom_toBottomOf="@id/userImageView"
+        app:layout_constraintLeft_toLeftOf="@id/userImageView"
+        app:layout_constraintRight_toRightOf="@id/userImageView"
+        app:layout_constraintTop_toTopOf="@id/userImageView"
+        tools:text="CD" />
+
+    <ImageView
+        android:id="@+id/userImageView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:padding="3dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:includeFontPadding="false"
+        android:textColor="@color/white"
+        app:layout_constraintLeft_toRightOf="@id/userImageView"
+        app:layout_constraintRight_toLeftOf="@id/unreadMentionCount"
+        app:layout_constraintTop_toTopOf="@id/userImageView"
+        android:ellipsize="middle"
+        android:maxLines="1"
+        android:maxWidth="250dp"
+        tools:text="A really long title name that could create some really big issues if it is super long and doesn't make sense" />
+
+    <TextView
+        android:id="@+id/message"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginRight="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/message_background_outbox"
+        app:layout_constraintLeft_toLeftOf="@id/title"
+        app:layout_constraintRight_toLeftOf="@id/timestamp"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        tools:text="A really long message that if it was too long would create some really bad layout problems with multiple lines." />
+
+    <ImageView
+        android:id="@+id/fileIcon"
+        android:layout_width="40dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="4dp"
+        android:cropToPadding="true"
+        android:scaleType="fitCenter"
+        android:src="?android:attr/actionModePasteDrawable"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title" />
+
+    <TextView
+        android:id="@+id/fileExtensionText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="4dp"
+        android:ellipsize="middle"
+        android:gravity="center"
+        android:singleLine="true"
+        android:textSize="12sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/fileIcon"
+        app:layout_constraintLeft_toLeftOf="@id/fileIcon"
+        app:layout_constraintRight_toRightOf="@id/fileIcon"
+        tools:text="WICKR" />
+
+    <LinearLayout
+        android:id="@+id/fileLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="20dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/fileIcon"
+        app:layout_constraintLeft_toRightOf="@id/fileIcon"
+        app:layout_constraintRight_toLeftOf="@id/timestamp"
+        app:layout_constraintTop_toTopOf="@id/fileIcon">
+
+        <TextView
+            android:id="@+id/fileNameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            tools:text="InsanelyLongLongLongLooooooooongFileNameThatPushesTextAway.mp4" />
+
+        <TextView
+            android:id="@+id/fileSizeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="3.52MB" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/unreadMentionCount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/red_circle"
+        android:gravity="center"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="23" />
+
+    <TextView
+        android:id="@+id/timestamp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:text="01:23pm" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

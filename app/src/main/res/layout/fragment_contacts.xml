@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:windowBackground">
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="15dp"
+        android:paddingLeft="15dp"
+        android:layout_marginRight="5dp"
+        android:hint="@string/contact_search_hint"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toStartOf="@id/createConvoBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/contactSearch" />
+
+
+    <ImageButton
+        android:id="@+id/createConvoBtn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_weight=".2"
+        android:padding="1dp"
+        android:layout_marginBottom="3dp"
+        android:scaleType="centerInside"
+        android:background="@drawable/btn_gray"
+        android:src="@drawable/ic_create_convo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.atakmap.android.wickr.ui.RecyclerView
+        android:id="@+id/memberList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintBottom_toTopOf="@id/addUsersBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/createConvoBtn"
+        app:layout_constraintVertical_bias="0.0" />
+    <ProgressBar
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/memberList"
+        android:id="@+id/contactLoading"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/addUsersBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Users"
+        android:textColor="#FFFFFFFF"
+        android:paddingHorizontal="20dp"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        android:minHeight="40dp"
+        android:visibility="gone"
+        android:background="@drawable/btn_gray"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/memberList"
+        app:layout_constraintBottom_toTopOf="@id/cancelAddUsersBtn"
+        />
+    <Button
+        android:id="@+id/cancelAddUsersBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFFFF"
+        android:paddingHorizontal="20dp"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="3dp"
+        android:minHeight="40dp"
+        android:visibility="gone"
+        android:background="@drawable/btn_gray"
+        android:text="@string/cancel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/addUsersBtn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

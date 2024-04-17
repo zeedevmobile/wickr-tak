@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/roomMembersTitle"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="#FF222222"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/backRoomManagement"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="3dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginBottom="3dp"
+            android:background="#00000000"
+            android:scaleType="fitStart"
+            android:src="@drawable/back_arrow" />
+
+
+        <TextView
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/room_members"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <ImageButton
+            android:id="@+id/addMembersBtn"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="5dp"
+            android:background="@drawable/btn_gray"
+            android:src="@drawable/person_add" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/titleView"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/roomMembersTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:gravity="right"
+            android:text="@string/title_label" />
+        <TextView
+            android:id="@+id/titleText"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="end"
+            android:maxWidth="200dp"
+            android:ellipsize="middle"
+            android:maxLines="1"
+            android:layout_marginRight="20dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/descView"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/titleView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:gravity="right"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_marginHorizontal="20dp"
+            android:text="@string/description_label" />
+        <TextView
+            android:id="@+id/descText"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:layout_weight="1"
+            android:maxWidth="200dp"
+            android:ellipsize="middle"
+            android:maxLines="1"
+            android:layout_marginRight="20dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/modifyMembers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/descView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="horizontal">
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+    <com.atakmap.android.wickr.ui.RecyclerView
+        android:id="@+id/memberList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/modifyMembers"
+        app:layout_constraintBottom_toTopOf="@id/leaveOrDeleteRoomBtn"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/leaveOrDeleteRoomBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="@string/leave_room"
+        android:textColor="#FF0000"
+        android:paddingHorizontal="20dp"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        android:minHeight="40dp"
+        android:background="@drawable/btn_gray"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/memberList"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

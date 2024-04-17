@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/msg_view"
+    android:background="#FF222222"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/userImageView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/userImageText"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@id/userImageView"
+        app:layout_constraintLeft_toLeftOf="@id/userImageView"
+        app:layout_constraintRight_toRightOf="@id/userImageView"
+        app:layout_constraintTop_toTopOf="@id/userImageView"
+        tools:text="CD" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        app:layout_constraintLeft_toRightOf="@id/userImageView"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/userImageView"
+        tools:text="Title" />
+
+    <TextView
+        android:id="@+id/message"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toTopOf="@id/reactionsLayout"
+        app:layout_constraintLeft_toLeftOf="@id/title"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        tools:text="Message" />
+
+    <ImageView
+        android:id="@+id/fileIcon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="1dp"
+        android:cropToPadding="true"
+        android:scaleType="fitCenter"
+        android:src="?android:attr/actionModePasteDrawable"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/reactionsLayout"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/userImageView" />
+
+    <TextView
+        android:id="@+id/fileExtensionText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="4dp"
+        android:ellipsize="middle"
+        android:gravity="center"
+        android:singleLine="true"
+        android:textSize="10sp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/fileIcon"
+        app:layout_constraintLeft_toLeftOf="@id/fileIcon"
+        app:layout_constraintRight_toRightOf="@id/fileIcon"
+        tools:text="WICKR" />
+
+    <LinearLayout
+        android:id="@+id/fileLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@id/fileIcon"
+        app:layout_constraintLeft_toRightOf="@id/fileIcon"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/fileIcon">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/fileNameText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="middle"
+                android:maxWidth="200dp"
+                android:singleLine="true"
+                tools:text="InsanelyLongLongLongLooooooooongFileNameThatPushesTextAway.mp4" />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                />
+            <ImageView
+                android:id="@+id/downloadStateBtn"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_gravity="right"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="3dp"
+                android:background="@drawable/btn_gray"
+                android:src="@drawable/file_download" />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/fileSizeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="3.52MB" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/reactionsLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/message" />
+
+    <TextView
+        android:id="@+id/sendState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:textColor="#FF0000"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:text="@string/failed_message_send"
+        android:textSize="11dp"
+        tools:text="Failed to Send."
+        app:layout_constraintBottom_toBottomOf="@id/timestamp"
+        app:layout_constraintEnd_toStartOf="@id/timestamp"
+        app:layout_constraintTop_toBottomOf="@id/message" />
+    <TextView
+        android:id="@+id/timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="4dp"
+        app:layout_constraintRight_toLeftOf="@id/messageExpiration"
+        app:layout_constraintTop_toBottomOf="@id/message"
+        tools:text="01:23pm" />
+    <TextView
+        android:id="@+id/messageExpiration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/message"
+        tools:text="364D" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,7 +11,6 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -21,7 +20,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.atakmap.android.ipc.AtakBroadcast
 import com.atakmap.android.maps.MapView
-import com.atakmap.android.wickr.*
+import com.atakmap.android.wickr.CreateConvoFragmentEvent
+import com.atakmap.android.wickr.MessageFragmentEvent
+import com.atakmap.android.wickr.PopFragmentEvent
+import com.atakmap.android.wickr.Requests
+import com.atakmap.android.wickr.WickrAPIUnpairedEvent
+import com.atakmap.android.wickr.WickrContactListEvent
+import com.atakmap.android.wickr.WickrConvoCreatedEvent
+import com.atakmap.android.wickr.WickrConvoEditEvent
+import com.atakmap.android.wickr.WickrInvalidRequestEvent
+import com.atakmap.android.wickr.WickrMapComponent
+import com.atakmap.android.wickr.WickrUserAvatarUpdateEvent
 import com.atakmap.android.wickr.plugin.R
 import com.atakmap.android.wickr.ui.adapters.ContactClickListener
 import com.atakmap.android.wickr.ui.adapters.WickrUserAdapter
@@ -30,11 +39,14 @@ import com.atakmap.android.wickr.utils.SettingsManager
 import com.wickr.android.api.WickrAPI
 import com.wickr.android.api.WickrAPIObjects
 import com.wickr.android.api.WickrAPIRequests
-import kotlinx.android.synthetic.main.contact_list.*
-import kotlinx.android.synthetic.main.dialog_create_convo.view.*
-import kotlinx.android.synthetic.main.dialog_loading.view.*
-import kotlinx.android.synthetic.main.fragment_contacts.*
-import kotlinx.coroutines.flow.*
+import kotlinx.android.synthetic.main.dialog_loading.view.loadingTextView
+import kotlinx.android.synthetic.main.fragment_contacts.addUsersBtn
+import kotlinx.android.synthetic.main.fragment_contacts.cancelAddUsersBtn
+import kotlinx.android.synthetic.main.fragment_contacts.contactLoading
+import kotlinx.android.synthetic.main.fragment_contacts.contactSearch
+import kotlinx.android.synthetic.main.fragment_contacts.createConvoBtn
+import kotlinx.android.synthetic.main.fragment_contacts.memberList
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.greenrobot.eventbus.Subscribe
 
 class ContactsListFragment private constructor (private val pluginContext: Context, private val showSearchAndCreate: Boolean, private val newConvo: Boolean, private val convo: WickrAPIObjects.WickrConvo?) : Fragment(), ContactClickListener, IBackButtonHandler {
@@ -220,6 +232,7 @@ class ContactsListFragment private constructor (private val pluginContext: Conte
                 return false
             }
         })
+
     }
 
     private fun showWaitingDialog() {

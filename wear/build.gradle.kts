@@ -36,6 +36,8 @@ android {
 
 dependencies {
 
+    implementation(files("libs/priv-health-tracking-mock-2023.aar"))
+
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
     implementation("com.google.android.gms:play-services-wearable:18.1.0")

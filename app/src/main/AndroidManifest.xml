@@ -1,6 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.atakmap.android.wickr.plugin"
     tools:ignore="GoogleAppIndexingWarning">
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
@@ -25,6 +24,23 @@
         <meta-data android:name="plugin-api" android:value="${atakApiVersion}"/>
         <meta-data android:name="app_desc" android:value="@string/app_desc"/>
 
+        <service
+            android:name="com.atakmap.android.wickr.service.DataListenerService"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />
+                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+                <action android:name="com.google.android.gms.wearable.REQUEST_RECEIVED" />
+                <action android:name="com.google.android.gms.wearable.CAPABILITY_CHANGED" />
+                <action android:name="com.google.android.gms.wearable.CHANNEL_EVENT" />
+
+                <data
+                    android:host="*"
+                    android:pathPrefix="/msg"
+                    android:scheme="wear" />
+            </intent-filter>
+        </service>
 
        <!-- This fictitious activity entry allow for ATAK 4.6.0.2 and newer to perform 
             plugin discovery  android devices.  If this is removed, the plugin will 

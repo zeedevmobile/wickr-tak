@@ -59,12 +59,13 @@ buildscript {
         }
     }
     dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20"
+
         if(isDevKitEnabled()) {
             classpath "com.atakmap.gradle:atak-gradle-takdev:${takdevVersion}"
         } else {
             classpath files(takdevPlugin)
         }
-
     }
 }
 
@@ -87,7 +88,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'atak-takdev-plugin'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-
 
 def supportedFlavors = 
 [
@@ -114,6 +114,8 @@ def supportedFlavors =
 ]
 
 android {
+    namespace 'com.atakmap.android.wickr.plugin'
+
     compileSdkVersion 33
 
     bundle {
@@ -242,7 +244,7 @@ android {
 
 
 dependencies {
-    def appcompat_version = "1.4.2"
+    def appcompat_version = "1.6.1"
 
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     // For loading and tinting drawables on older versions of the platform
@@ -250,16 +252,18 @@ dependencies {
 
     implementation fileTree(dir: 'libs', include: '*.jar')
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
-    implementation 'androidx.core:core-ktx:1.8.0'
-    implementation 'com.google.protobuf:protobuf-java:3.22.2'
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'com.google.protobuf:protobuf-java:3.22.3'
     implementation "com.wickr.android:api:0.15.1@aar"
     implementation "androidx.constraintlayout:constraintlayout:2.1.4"
     implementation 'org.greenrobot:eventbus:3.2.0'
 
+    implementation 'com.google.android.gms:play-services-wearable:18.1.0'
+
     // Recyclerview version depends on some androidx libraries which
     // are supplied by core, so they should be excluded.  Otherwise
     // bad things happen in the release builds after proguarding
-    implementation ('androidx.recyclerview:recyclerview:1.1.0') {
+    implementation ('androidx.recyclerview:recyclerview:1.3.2') {
         exclude module: 'collection'
         exclude module: 'core'
         exclude module: 'lifecycle'
@@ -281,7 +285,7 @@ dependencies {
 
 
 }
-configurations.all {
+configurations.configureEach {
     resolutionStrategy.eachDependency { details ->
         if (details.requested.group == 'androidx.core') {
             details.useVersion "1.2.0"

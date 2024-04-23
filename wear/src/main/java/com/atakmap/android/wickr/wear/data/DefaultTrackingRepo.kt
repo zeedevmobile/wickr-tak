@@ -2,6 +2,7 @@ package com.atakmap.android.wickr.wear.data
 
 import android.content.Context
 import android.util.Log
+import com.atakmap.android.wickr.common.TrackedData
 import com.atakmap.android.wickr.wear.R
 import com.atakmap.android.wickr.wear.data.IBIDataParsing.Companion.getValidIbiList
 import com.samsung.android.service.health.tracking.HealthTracker

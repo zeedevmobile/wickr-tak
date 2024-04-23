@@ -1,5 +1,6 @@
 package com.atakmap.android.wickr.wear.data
 
+import com.atakmap.android.wickr.common.TrackedData
 import kotlinx.coroutines.flow.Flow
 
 interface TrackingRepo {

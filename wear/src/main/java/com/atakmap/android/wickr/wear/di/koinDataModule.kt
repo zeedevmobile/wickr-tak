@@ -5,6 +5,7 @@ import com.atakmap.android.wickr.wear.data.DefaultCapabilityRepo
 import com.atakmap.android.wickr.wear.data.DefaultMessageRepo
 import com.atakmap.android.wickr.wear.data.HealthTrackingServiceConnection
 import com.atakmap.android.wickr.wear.data.MessageRepo
+import com.atakmap.android.wickr.wear.domain.GetCapableNodes
 import com.google.android.gms.wearable.Wearable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,4 +26,6 @@ val koinDataModule = module {
     single<MessageRepo> { DefaultMessageRepo(get()) }
 
     single { HealthTrackingServiceConnection(androidContext(), get()) }
+
+    single { GetCapableNodes(get()) }
 }

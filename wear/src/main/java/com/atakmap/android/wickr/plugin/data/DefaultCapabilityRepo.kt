@@ -1,10 +1,11 @@
-package com.atakmap.android.wickr.wear.data
+package com.atakmap.android.wickr.plugin.data
 
 import com.google.android.gms.wearable.CapabilityClient
 import com.google.android.gms.wearable.Node
 import kotlinx.coroutines.tasks.await
 
 class DefaultCapabilityRepo(private val capabilityClient: CapabilityClient) : CapabilityRepo {
+
     override suspend fun getNodesForCapability(
         capability: String, allCapabilities: Map<Node, Set<String>>
     ): Set<Node> {

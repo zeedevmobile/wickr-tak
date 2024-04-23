@@ -1,10 +1,10 @@
-package com.atakmap.android.wickr.wear.data
+package com.atakmap.android.wickr.plugin.data
 
 import android.content.Context
 import android.util.Log
 import com.atakmap.android.wickr.common.TrackedData
-import com.atakmap.android.wickr.wear.R
-import com.atakmap.android.wickr.wear.data.IBIDataParsing.Companion.getValidIbiList
+import com.atakmap.android.wickr.plugin.R
+import com.atakmap.android.wickr.plugin.data.IBIDataParsing.Companion.getValidIbiList
 import com.samsung.android.service.health.tracking.HealthTracker
 import com.samsung.android.service.health.tracking.HealthTrackingService
 import com.samsung.android.service.health.tracking.data.DataPoint
@@ -24,6 +24,10 @@ class DefaultTrackingRepo(
     private val healthTrackingServiceConnection: HealthTrackingServiceConnection,
     private val context: Context,
 ) : TrackingRepo {
+
+    companion object {
+        private const val TAG = "DefaultTrackingRepo"
+    }
 
     private val trackingType = HealthTrackerType.HEART_RATE
     private var listenerSet = false
@@ -62,9 +66,7 @@ class DefaultTrackingRepo(
         val updateListener = object : HealthTracker.TrackerEventListener {
             override fun onDataReceived(dataPoints: MutableList<DataPoint>) {
 
-
                 for (dataPoint in dataPoints) {
-
                     var trackedData: TrackedData? = null
                     val hrValue = dataPoint.getValue(ValueKey.HeartRateSet.HEART_RATE)
                     val hrStatus = dataPoint.getValue(ValueKey.HeartRateSet.HEART_RATE_STATUS)
@@ -72,7 +74,7 @@ class DefaultTrackingRepo(
                     if (isHRValid(hrStatus)) {
                         trackedData = TrackedData()
                         trackedData.hr = hrValue
-                        Log.i("XXXXX", "valid HR: $hrValue")
+                        Log.i(TAG, "valid HR: $hrValue")
                     } else {
                         coroutineScope.runCatching {
                             trySendBlocking(TrackerMessage.TrackerWarningMessage(getError(hrStatus.toString())))
@@ -103,29 +105,26 @@ class DefaultTrackingRepo(
             }
 
             override fun onFlushCompleted() {
-
-                Log.i("XXXXX", "onFlushCompleted()")
+                Log.i(TAG, "onFlushCompleted()")
                 coroutineScope.runCatching {
                     trySendBlocking(TrackerMessage.FlushCompletedMessage)
                 }
             }
 
             override fun onError(trackerError: HealthTracker.TrackerError?) {
-
-                Log.i("XXXXX", "onError()")
+                Log.i(TAG, "onError()")
                 coroutineScope.runCatching {
                     trySendBlocking(TrackerMessage.TrackerErrorMessage(getError(trackerError.toString())))
                 }
             }
         }
 
-        heartRateTracker =
-            healthTrackingService!!.getHealthTracker(trackingType)
+        heartRateTracker = healthTrackingService!!.getHealthTracker(trackingType)
 
         setListener(updateListener)
 
         awaitClose {
-            Log.i("XXXXX", "Tracking flow awaitClose()")
+            Log.i(TAG, "Tracking flow awaitClose()")
             stopTracking()
         }
     }
@@ -149,7 +148,7 @@ class DefaultTrackingRepo(
     }
 
     override fun hasCapabilities(): Boolean {
-        Log.i("XXXXX", "hasCapabilities()")
+        Log.i(TAG, "hasCapabilities()")
         healthTrackingService = healthTrackingServiceConnection.getHealthTrackingService()
         val trackers: List<HealthTrackerType> =
             healthTrackingService!!.trackingCapability.supportHealthTrackerTypes

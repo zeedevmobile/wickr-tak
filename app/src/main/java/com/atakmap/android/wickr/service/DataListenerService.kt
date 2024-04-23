@@ -27,7 +27,7 @@ class DataListenerService : WearableListenerService() {
 
     override fun onMessageReceived(messageEvent: MessageEvent) {
         super.onMessageReceived(messageEvent)
-
+        Log.d("XXXXX", "onMessageReceived()")
         val value = messageEvent.data.decodeToString()
         Log.i(TAG, "onMessageReceived(): $value")
         when (messageEvent.path) {

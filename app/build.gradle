@@ -223,8 +223,10 @@ android {
         release.setRoot('build-types/release')
 
     }
-
+    
     defaultConfig {
+        applicationId 'com.atakmap.android.wickr.plugin'
+
         minSdkVersion 26
         targetSdkVersion 33
 

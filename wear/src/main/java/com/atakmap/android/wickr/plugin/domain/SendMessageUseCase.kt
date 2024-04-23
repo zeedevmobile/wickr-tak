@@ -1,23 +1,21 @@
-package com.atakmap.android.wickr.wear.domain
+package com.atakmap.android.wickr.plugin.domain
 
 import android.util.Log
 import com.atakmap.android.wickr.common.TrackedData
-import com.atakmap.android.wickr.wear.data.MessageRepo
-import com.atakmap.android.wickr.wear.data.TrackingRepo
+import com.atakmap.android.wickr.plugin.data.MessageRepo
+import com.atakmap.android.wickr.plugin.data.TrackingRepo
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
 
 private const val TAG = "SendMessageUseCase"
 
 private const val MESSAGE_PATH = "/msg"
 
-class SendMessageUseCase : KoinComponent {
-
-    private val messageRepo: MessageRepo = get()
-    private val trackingRepo: TrackingRepo = get()
-    private val getCapableNodes: GetCapableNodes = get()
+class SendMessageUseCase(
+    private val messageRepo: MessageRepo,
+    private val trackingRepo: TrackingRepo,
+    private val getCapableNodes: GetCapableNodes
+) {
 
     suspend operator fun invoke(): Boolean {
 
@@ -26,8 +24,7 @@ class SendMessageUseCase : KoinComponent {
         return if (nodes.isNotEmpty()) {
 
             val node = nodes.first()
-            val message =
-                encodeMessage(trackingRepo.getValidHrData())
+            val message = encodeMessage(trackingRepo.getValidHrData())
             messageRepo.sendMessage(message, node, MESSAGE_PATH)
 
             true

@@ -4,31 +4,54 @@ plugins {
 }
 
 android {
-    namespace = "com.atakmap.android.wickr.wear"
+    namespace = "com.atakmap.android.wickr.plugin"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.atakmap.android.wickr.wear"
+        applicationId = "com.atakmap.android.wickr.plugin"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+    }
 
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file("../keygen/android_keystore")
+            storePassword = "tnttnt" as String
+            keyAlias = "wintec_mapping" as String
+            keyPassword = "tnttnt" as String
+        }
+        create("release") {
+            storeFile = file("../keygen/android_keystore")
+            storePassword = "tnttnt" as String
+            keyAlias = "wintec_mapping" as String
+            keyPassword = "tnttnt" as String
+        }
     }
 
     buildTypes {
+        debug {
+            isDebuggable = true
+            signingConfig = signingConfigs.getByName("debug")
+            matchingFallbacks += listOf("sdk")
+        }
         release {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("release")
+            matchingFallbacks += listOf("odk")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = "1.8"
     }
@@ -38,13 +61,11 @@ dependencies {
     implementation(project(":common"))
     implementation(files("libs/priv-health-tracking-mock-2023.aar"))
 
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
+    // Android
     implementation("com.google.android.gms:play-services-wearable:18.1.0")
     implementation("androidx.activity:activity-ktx:1.9.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
-
     implementation("com.google.android.material:material:1.11.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.appcompat:appcompat:1.6.1")
 
     // RxJava
@@ -54,5 +75,7 @@ dependencies {
     // Koin
     implementation("io.insert-koin:koin-android:3.4.2")
 
+    // coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
 }

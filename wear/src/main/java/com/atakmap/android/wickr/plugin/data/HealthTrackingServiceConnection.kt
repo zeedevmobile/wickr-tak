@@ -1,4 +1,4 @@
-package com.atakmap.android.wickr.wear.data
+package com.atakmap.android.wickr.plugin.data
 
 import android.content.Context
 import android.util.Log

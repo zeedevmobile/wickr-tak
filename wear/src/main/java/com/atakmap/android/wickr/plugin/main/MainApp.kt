@@ -1,11 +1,12 @@
-package com.atakmap.android.wickr.wear.main
+package com.atakmap.android.wickr.plugin.main
 
 import android.app.Application
-import com.atakmap.android.wickr.wear.di.koinDataModule
+import com.atakmap.android.wickr.plugin.di.koinDataModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
 class MainApp : Application() {
+
     override fun onCreate() {
         super.onCreate()
 

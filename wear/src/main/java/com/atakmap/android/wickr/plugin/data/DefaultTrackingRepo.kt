@@ -2,7 +2,7 @@ package com.atakmap.android.wickr.plugin.data
 
 import android.content.Context
 import android.util.Log
-import com.atakmap.android.wickr.common.TrackedData
+import com.atakmap.android.wickr.common.TrackedHrData
 import com.atakmap.android.wickr.plugin.R
 import com.atakmap.android.wickr.plugin.data.IBIDataParsing.Companion.getValidIbiList
 import com.samsung.android.service.health.tracking.HealthTracker
@@ -46,9 +46,9 @@ class DefaultTrackingRepo(
 
     private val maxValuesToKeep = 40
     private var heartRateTracker: HealthTracker? = null
-    private var validHrData = ArrayList<TrackedData>()
+    private var validHrData = ArrayList<TrackedHrData>()
 
-    override fun getValidHrData(): ArrayList<TrackedData> {
+    override fun getValidHrData(): ArrayList<TrackedHrData> {
         return validHrData
     }
 
@@ -67,12 +67,12 @@ class DefaultTrackingRepo(
             override fun onDataReceived(dataPoints: MutableList<DataPoint>) {
 
                 for (dataPoint in dataPoints) {
-                    var trackedData: TrackedData? = null
+                    var trackedData: TrackedHrData? = null
                     val hrValue = dataPoint.getValue(ValueKey.HeartRateSet.HEART_RATE)
                     val hrStatus = dataPoint.getValue(ValueKey.HeartRateSet.HEART_RATE_STATUS)
 
                     if (isHRValid(hrStatus)) {
-                        trackedData = TrackedData()
+                        trackedData = TrackedHrData()
                         trackedData.hr = hrValue
                         Log.i(TAG, "valid HR: $hrValue")
                     } else {
@@ -83,7 +83,7 @@ class DefaultTrackingRepo(
 
                     val validIbiList = getValidIbiList(dataPoint)
                     if (validIbiList.size > 0) {
-                        if (trackedData == null) trackedData = TrackedData()
+                        if (trackedData == null) trackedData = TrackedHrData()
                         trackedData.ibi.addAll(validIbiList)
                     }
 
@@ -157,7 +157,7 @@ class DefaultTrackingRepo(
 }
 
 sealed class TrackerMessage {
-    class DataMessage(val trackedData: TrackedData) : TrackerMessage()
+    class DataMessage(val trackedData: TrackedHrData) : TrackerMessage()
     object FlushCompletedMessage : TrackerMessage()
     class TrackerErrorMessage(val trackerError: String) : TrackerMessage()
     class TrackerWarningMessage(val trackerWarning: String) : TrackerMessage()

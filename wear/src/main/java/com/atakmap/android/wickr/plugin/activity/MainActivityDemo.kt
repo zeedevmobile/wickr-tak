@@ -7,14 +7,14 @@ import androidx.activity.viewModels
 import com.atakmap.android.wickr.plugin.R
 
 
-class MainActivity : ComponentActivity() {
+class MainActivityDemo : ComponentActivity() {
 
-    private val viewModel: MainActivityViewModel by viewModels()
+    private val viewModel: MainActivityDemoViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main_demo)
 
         val start = findViewById<TextView>(R.id.textView_start_tracking)
         start.setOnClickListener {

@@ -3,7 +3,7 @@ package com.atakmap.android.wickr.plugin.activity
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.atakmap.android.wickr.common.TrackedData
+import com.atakmap.android.wickr.common.TrackedHrData
 import com.atakmap.android.wickr.plugin.data.ConnectionMessage
 import com.atakmap.android.wickr.plugin.data.TrackerMessage
 import com.atakmap.android.wickr.plugin.domain.AreTrackingCapabilitiesAvailableUseCase
@@ -23,7 +23,7 @@ import org.koin.core.component.get
 
 private const val TAG = "MainViewModel"
 
-class MainActivityViewModel : ViewModel(), KoinComponent {
+class MainActivityDemoViewModel : ViewModel(), KoinComponent {
 
     private val makeConnectionToHealthTrackingServiceUseCase: MakeConnectionToHealthTrackingServiceUseCase =
         get()
@@ -113,7 +113,7 @@ class MainActivityViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    private fun processExerciseUpdate(trackedData: TrackedData) {
+    private fun processExerciseUpdate(trackedData: TrackedHrData) {
 
         val hr = trackedData.hr
         val ibi = trackedData.ibi

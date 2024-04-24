@@ -16,26 +16,36 @@
 
 package com.atakmap.android.wickr.service
 
+import android.content.Intent
 import android.util.Log
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.WearableListenerService
+
 
 private const val TAG = "DataListenerService"
 private const val MESSAGE_PATH = "/msg"
 
 class DataListenerService : WearableListenerService() {
 
+
     override fun onMessageReceived(messageEvent: MessageEvent) {
         super.onMessageReceived(messageEvent)
-        Log.d("XXXXX", "onMessageReceived()")
+        Log.d(TAG, "onMessageReceived()")
         val value = messageEvent.data.decodeToString()
-        Log.i(TAG, "onMessageReceived(): $value")
+
         when (messageEvent.path) {
             MESSAGE_PATH -> {
                 Log.i(TAG, "Service: message (/msg) received: $value")
 
                 if (value != "") {
-                    // TODO
+
+                    Intent().also {
+                        it.action = "filter"
+                        it.putExtra("extra", value)
+                        sendBroadcast(it)
+                    }
+
+
                 } else {
                     Log.i(TAG, "value is an empty string")
                 }

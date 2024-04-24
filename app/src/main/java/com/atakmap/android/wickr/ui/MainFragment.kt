@@ -3,22 +3,30 @@ package com.atakmap.android.wickr.ui
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.*
-import androidx.fragment.app.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.atakmap.android.maps.MapView
-import com.atakmap.android.wickr.*
+import com.atakmap.android.wickr.Requests
+import com.atakmap.android.wickr.WickrMapComponent
 import com.atakmap.android.wickr.plugin.R
 import com.atakmap.android.wickr.utils.SettingsManager
-import com.wickr.android.api.WickrAPI
 import com.wickr.android.api.WickrAPIObjects
-import com.wickr.android.api.WickrAPIRequests
-import kotlinx.android.synthetic.main.main_layout.*
+import kotlinx.android.synthetic.main.main_layout.tabPager
+import kotlinx.android.synthetic.main.main_layout.tabTitle
+import kotlinx.android.synthetic.main.main_layout.tab_left_dot
+import kotlinx.android.synthetic.main.main_layout.tab_middle_dot
+import kotlinx.android.synthetic.main.main_layout.tab_right_dot
+import kotlinx.android.synthetic.main.main_layout.tab_wear_dot
 import org.greenrobot.eventbus.Subscribe
 
 class TabCollectionPagerAdpater(private val fm: FragmentManager, private val pluginContext: Context, private val fragments: ArrayList<Fragment>) : FragmentStatePagerAdapter(fm) {
     override fun getCount(): Int {
-        return 3
+        return 4
     }
 
     override fun getItem(pos: Int): Fragment {
@@ -37,6 +45,7 @@ class TabCollectionPagerAdpater(private val fm: FragmentManager, private val plu
             0 -> pluginContext.getString(R.string.home_tab_rooms)
             1 -> pluginContext.getString(R.string.home_tab_dms)
             2 -> pluginContext.getString(R.string.home_tab_contacts)
+            3 -> "Wear sample"
             else -> "Unknown"
         }
     }
@@ -74,7 +83,7 @@ class MainFragment(private val pluginContext: Context, private val mapView: MapV
         tabDots.add(tab_left_dot)
         tabDots.add(tab_middle_dot)
         tabDots.add(tab_right_dot)
-
+        tabDots.add(tab_wear_dot)
 
         val fragments: MutableList<Fragment> = java.util.ArrayList()
         fragments.add(
@@ -85,6 +94,9 @@ class MainFragment(private val pluginContext: Context, private val mapView: MapV
         )
         fragments.add(
             ContactsListFragment.newInstance(pluginContext)!!
+        )
+        fragments.add(
+            WearSampleFragment.newInstance(pluginContext)!!
         )
         tabCollectionPagerAdpater = TabCollectionPagerAdpater(
             childFragmentManager, pluginContext, fragments as ArrayList<Fragment>
@@ -151,6 +163,7 @@ class MainFragment(private val pluginContext: Context, private val mapView: MapV
             0 -> tabTitle.text = pluginContext.getString(R.string.home_tab_rooms)
             1 -> tabTitle.text = pluginContext.getString(R.string.home_tab_dms)
             2 -> tabTitle.text = pluginContext.getString(R.string.home_tab_contacts)
+            3 -> tabTitle.text = "Wear sample"
         }
         selectedPos = pos
         updateDots()

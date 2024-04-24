@@ -62,6 +62,12 @@
             android:layout_height="7dp"
             android:layout_marginStart="4dp"
             android:background="@drawable/dot_selector" />
+        <View
+            android:id="@+id/tab_wear_dot"
+            android:layout_width="10dp"
+            android:layout_height="7dp"
+            android:layout_marginStart="4dp"
+            android:background="@drawable/dot_selector" />
 
     </LinearLayout>
 

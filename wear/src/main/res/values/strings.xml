@@ -24,7 +24,7 @@
     <string name="StatusCompleted">Measurement completed.</string>
     <string name="SpO2Value">SpO2 value: </string>
     <string name="StopLabel">Stop</string>
-    <string name="StartLabel">Measure</string>
+    <string name="measure_sp_label">Measure 02</string>
     <string name="SpO2">SpO2</string>
     <string name="HeartRate">Heart Rate</string>
     <string name="HeartRateStatus">HR Status</string>

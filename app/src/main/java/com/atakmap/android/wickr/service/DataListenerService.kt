@@ -21,33 +21,32 @@ import android.util.Log
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.WearableListenerService
 
-
 private const val TAG = "DataListenerService"
 private const val MESSAGE_PATH = "/msg"
 
 class DataListenerService : WearableListenerService() {
 
+    companion object {
+        const val ACTION_HEALTH_DATA_MESSAGE = "ACTION_HEALTH_DATA_MESSAGE"
+        const val EXTRA_HEALTH_DATA = "EXTRA_HEALTH_DATA"
+    }
 
     override fun onMessageReceived(messageEvent: MessageEvent) {
         super.onMessageReceived(messageEvent)
-        Log.d(TAG, "onMessageReceived()")
-        val value = messageEvent.data.decodeToString()
 
         when (messageEvent.path) {
             MESSAGE_PATH -> {
-                Log.i(TAG, "Service: message (/msg) received: $value")
+                val data = messageEvent.data.decodeToString()
+                Log.i(TAG, "Service: message (/msg) received: $data")
 
-                if (value != "") {
-
+                if (data.isNotEmpty()) {
                     Intent().also {
-                        it.action = "filter"
-                        it.putExtra("extra", value)
+                        it.action = ACTION_HEALTH_DATA_MESSAGE
+                        it.putExtra(EXTRA_HEALTH_DATA, data)
                         sendBroadcast(it)
                     }
-
-
                 } else {
-                    Log.i(TAG, "value is an empty string")
+                    Log.i(TAG, "data is empty")
                 }
             }
         }

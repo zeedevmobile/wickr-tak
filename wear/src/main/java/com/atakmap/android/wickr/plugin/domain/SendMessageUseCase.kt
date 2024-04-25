@@ -1,7 +1,7 @@
 package com.atakmap.android.wickr.plugin.domain
 
 import android.util.Log
-import com.atakmap.android.wickr.common.TrackedHrData
+import com.atakmap.android.wickr.common.TrackedHealthData
 import com.atakmap.android.wickr.plugin.data.MessageRepo
 import com.atakmap.android.wickr.plugin.data.TrackingRepo
 import kotlinx.serialization.encodeToString
@@ -35,7 +35,7 @@ class SendMessageUseCase(
         }
     }
 
-    fun encodeMessage(trackedData: ArrayList<TrackedHrData>): String {
+    fun encodeMessage(trackedData: ArrayList<TrackedHealthData>): String {
 
         return Json.encodeToString(trackedData)
     }

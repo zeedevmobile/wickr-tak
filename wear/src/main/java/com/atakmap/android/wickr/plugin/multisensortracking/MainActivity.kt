@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var txtHeartRate: TextView
     private lateinit var txtStatus: TextView
     private lateinit var txtSpo2: TextView
-    private lateinit var butStart: Button
+    private lateinit var buttonStart: Button
     private lateinit var measurementProgress: CircularProgressIndicator
 
     private val isMeasurementRunning = AtomicBoolean(false)
@@ -79,7 +79,7 @@ class MainActivity : ComponentActivity() {
                     txtStatus.invalidate()
                     txtSpo2.setText(R.string.SpO2DefaultValue)
                     txtSpo2.invalidate()
-                    butStart.setText(R.string.StartLabel)
+                    buttonStart.setText(R.string.measure_sp_label)
                     measurementProgress.progress = 0
                     measurementProgress.invalidate()
                 }
@@ -91,9 +91,6 @@ class MainActivity : ComponentActivity() {
 
     private val trackerDataObserver: TrackerDataObserver = object : TrackerDataObserver {
         override fun onHeartRateTrackerDataChanged(hrData: HeartRateData) {
-
-            if(hrData.status != 1) return
-
             viewModel.onHrDataReceived(hrData)
 
             runOnUiThread {
@@ -126,9 +123,7 @@ class MainActivity : ComponentActivity() {
                     Log.i(APP_TAG, "Device is moving")
                     runOnUiThread {
                         Toast.makeText(
-                            applicationContext,
-                            R.string.StatusDeviceMoving,
-                            Toast.LENGTH_SHORT
+                            applicationContext, R.string.StatusDeviceMoving, Toast.LENGTH_SHORT
                         ).show()
                     }
                 }
@@ -137,15 +132,14 @@ class MainActivity : ComponentActivity() {
                     Log.i(APP_TAG, "Low signal quality")
                     runOnUiThread {
                         Toast.makeText(
-                            applicationContext,
-                            R.string.StatusLowSignal,
-                            Toast.LENGTH_SHORT
+                            applicationContext, R.string.StatusLowSignal, Toast.LENGTH_SHORT
                         ).show()
                     }
                 }
 
                 SpO2Status.MEASUREMENT_COMPLETED -> {
                     Log.i(APP_TAG, "Measurement completed")
+                    viewModel.onSpO2DataReceived(spO2Value)
                     isMeasurementRunning.set(false)
                     spO2Listener!!.stopTracker()
                     runOnUiThread {
@@ -153,7 +147,7 @@ class MainActivity : ComponentActivity() {
                         txtStatus.invalidate()
                         txtSpo2.text = spO2Value.toString()
                         txtSpo2.invalidate()
-                        butStart.setText(R.string.StartLabel)
+                        buttonStart.setText(R.string.measure_sp_label)
                         measurementProgress.setProgress(measurementProgress.max, true)
                     }
                     window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -164,9 +158,7 @@ class MainActivity : ComponentActivity() {
         override fun onError(errorResourceId: Int) {
             runOnUiThread {
                 Toast.makeText(
-                    applicationContext,
-                    getString(errorResourceId),
-                    Toast.LENGTH_LONG
+                    applicationContext, getString(errorResourceId), Toast.LENGTH_LONG
                 ).show()
             }
         }
@@ -175,9 +167,7 @@ class MainActivity : ComponentActivity() {
         override fun onConnectionResult(stringResourceId: Int) {
             runOnUiThread {
                 Toast.makeText(
-                    applicationContext,
-                    getString(stringResourceId),
-                    Toast.LENGTH_LONG
+                    applicationContext, getString(stringResourceId), Toast.LENGTH_LONG
                 ).show()
             }
             if (stringResourceId != R.string.ConnectedToHs) {
@@ -205,9 +195,7 @@ class MainActivity : ComponentActivity() {
             } else {
                 runOnUiThread {
                     Toast.makeText(
-                        applicationContext,
-                        getString(R.string.ConnectionError),
-                        Toast.LENGTH_LONG
+                        applicationContext, getString(R.string.ConnectionError), Toast.LENGTH_LONG
                     ).show()
                 }
                 Log.e(APP_TAG, "Could not connect to Health Tracking Service: " + e.message)
@@ -223,19 +211,37 @@ class MainActivity : ComponentActivity() {
         txtHeartRate = findViewById(R.id.txtHeartRate)
         txtStatus = findViewById(R.id.txtStatus)
         txtSpo2 = findViewById(R.id.txtSpO2)
-        butStart = findViewById(R.id.butStart)
-        measurementProgress = findViewById(R.id.progressBar)
 
-        butStart.setOnClickListener {
-            viewModel.send()
-           // performMeasurement()
+        buttonStart = findViewById(R.id.button_measure_o2)
+
+        buttonStart.setOnClickListener {
+            performMeasurement()
         }
+
+        findViewById<Button>(R.id.button_alert_hr).apply {
+            setOnClickListener {
+                viewModel.sendHrAlert()
+            }
+        }
+
+        findViewById<Button>(R.id.button_alert_o2)?.apply {
+            setOnClickListener {
+                viewModel.sendSpO2Alert()
+            }
+        }
+
+        findViewById<Button>(R.id.button_send)?.apply {
+            setOnClickListener {
+                viewModel.sendData()
+            }
+        }
+
+        measurementProgress = findViewById(R.id.progressBar)
 
         adjustProgressBar(measurementProgress)
 
         if (ActivityCompat.checkSelfPermission(
-                applicationContext,
-                getString(R.string.BodySensors)
+                applicationContext, getString(R.string.BodySensors)
             ) == PackageManager.PERMISSION_DENIED
         ) requestPermissions(
             arrayOf(Manifest.permission.BODY_SENSORS), 0
@@ -292,7 +298,7 @@ class MainActivity : ComponentActivity() {
         }
         if (!isMeasurementRunning.get()) {
             previousStatus = SpO2Status.INITIAL_STATUS
-            butStart.setText(R.string.StopLabel)
+            buttonStart.setText(R.string.StopLabel)
             txtSpo2.setText(R.string.SpO2DefaultValue)
             measurementProgress.progress = 0
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -300,16 +306,16 @@ class MainActivity : ComponentActivity() {
             isMeasurementRunning.set(true)
             Thread { countDownTimer.start() }.start()
         } else {
-            butStart.setEnabled(false)
+            buttonStart.setEnabled(false)
             isMeasurementRunning.set(false)
             window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             spO2Listener?.stopTracker()
             val progressHandler = Handler(Looper.getMainLooper())
             progressHandler.postDelayed({
-                butStart.setText(R.string.StartLabel)
+                buttonStart.setText(R.string.measure_sp_label)
                 txtStatus.setText(R.string.StatusDefaultValue)
                 measurementProgress.progress = 0
-                butStart.setEnabled(true)
+                buttonStart.setEnabled(true)
             }, (MEASUREMENT_TICK * 2).toLong())
         }
     }
@@ -317,9 +323,7 @@ class MainActivity : ComponentActivity() {
     @Deprecated("This method has been deprecated in favor of using the Activity Result API\n      which brings increased type safety via an {@link ActivityResultContract} and the prebuilt\n      contracts for common intents available in\n      {@link androidx.activity.result.contract.ActivityResultContracts}, provides hooks for\n      testing, and allow receiving results in separate, testable classes independent from your\n      activity. Use\n      {@link #registerForActivityResult(ActivityResultContract, ActivityResultCallback)} passing\n      in a {@link RequestMultiplePermissions} object for the {@link ActivityResultContract} and\n      handling the result in the {@link ActivityResultCallback#onActivityResult(Object) callback}.")
     @Suppress("DEPRECATION")
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
+        requestCode: Int, permissions: Array<String>, grantResults: IntArray
     ) {
         if (requestCode == 0) {
             permissionGranted = true
@@ -349,8 +353,7 @@ class MainActivity : ComponentActivity() {
     private val isPermissionsOrConnectionInvalid: Boolean
         get() {
             if (ActivityCompat.checkSelfPermission(
-                    applicationContext,
-                    getString(R.string.BodySensors)
+                    applicationContext, getString(R.string.BodySensors)
                 ) == PackageManager.PERMISSION_DENIED
             ) requestPermissions(
                 arrayOf(Manifest.permission.BODY_SENSORS), 0
@@ -361,9 +364,7 @@ class MainActivity : ComponentActivity() {
             }
             if (!connected) {
                 Toast.makeText(
-                    applicationContext,
-                    getString(R.string.ConnectionError),
-                    Toast.LENGTH_SHORT
+                    applicationContext, getString(R.string.ConnectionError), Toast.LENGTH_SHORT
                 ).show()
                 return true
             }

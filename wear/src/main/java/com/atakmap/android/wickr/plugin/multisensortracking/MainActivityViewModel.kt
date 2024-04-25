@@ -2,7 +2,7 @@ package com.atakmap.android.wickr.plugin.multisensortracking
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.atakmap.android.wickr.common.TrackedHrData
+import com.atakmap.android.wickr.common.TrackedHealthData
 import com.atakmap.android.wickr.plugin.data.MessageRepo
 import com.atakmap.android.wickr.plugin.domain.GetCapableNodes
 import kotlinx.coroutines.launch
@@ -13,44 +13,95 @@ import org.koin.core.component.get
 
 class MainActivityViewModel : ViewModel(), KoinComponent {
 
-
     companion object {
         private const val MESSAGE_PATH = "/msg"
     }
 
     private val messageRepo: MessageRepo = get()
     private val getCapableNodes: GetCapableNodes = get()
-   // private val coroutineScope : CoroutineScope = get()
 
-    private var validHrData = ArrayList<TrackedHrData>()
+    private var currentHr: Int? = null
+    private var currentSpO2Data: Int? = null
 
     // TODO need to move the listeners into the VM
     fun onHrDataReceived(hrData: HeartRateData) {
-        val trackedData = TrackedHrData()
-        trackedData.hr = hrData.hr
-        trackedData.ibi.addAll(listOf(hrData.hrIbi, hrData.qIbi))
-
-        validHrData.add(0, trackedData)
-        if (validHrData.size > 10) validHrData.removeLast()
+        currentHr = hrData.hr
     }
 
-     fun send() {
-         viewModelScope.launch {
-             val nodes = getCapableNodes()
-             if (nodes.isNotEmpty()) {
-
-                 val node = nodes.first()
-                 val message = encodeMessage(validHrData)
-                 messageRepo.sendMessage(message, node, MESSAGE_PATH)
-
-                 // TODO success toast
-             } else {
-                 // TODO fail toast
-             }
-         }
+    fun onSpO2DataReceived(value: Int) {
+        currentSpO2Data = value
     }
 
-    private fun encodeMessage(trackedData: ArrayList<TrackedHrData>): String {
+    fun sendData() {
+        viewModelScope.launch {
+            val nodes = getCapableNodes()
+            if (nodes.isNotEmpty()) {
+                val node = nodes.first()
+                encodeHrData(
+                    TrackedHealthData(
+                        currentHr,
+                        currentSpO2Data,
+                        null,
+                        null
+                    )
+                ).also {
+                    messageRepo.sendMessage(it, node, MESSAGE_PATH)
+                }
+
+                // TODO success toast
+            } else {
+                // TODO fail toast
+            }
+        }
+    }
+
+    fun sendHrAlert() {
+        viewModelScope.launch {
+            val nodes = getCapableNodes()
+            if (nodes.isNotEmpty()) {
+                val node = nodes.first()
+                encodeHrData(
+                    TrackedHealthData(
+                        null,
+                        null,
+                        160,
+                        null
+                    )
+                ).also {
+                    messageRepo.sendMessage(it, node, MESSAGE_PATH)
+                }
+
+                // TODO success toast
+            } else {
+                // TODO fail toast
+            }
+        }
+    }
+
+    fun sendSpO2Alert() {
+        viewModelScope.launch {
+            val nodes = getCapableNodes()
+            if (nodes.isNotEmpty()) {
+                val node = nodes.first()
+                encodeHrData(
+                    TrackedHealthData(
+                        null,
+                        null,
+                        null,
+                        84
+                    )
+                ).also {
+                    messageRepo.sendMessage(it, node, MESSAGE_PATH)
+                }
+
+                // TODO success toast
+            } else {
+                // TODO fail toast
+            }
+        }
+    }
+
+    private fun encodeHrData(trackedData: TrackedHealthData): String {
         return Json.encodeToString(trackedData)
     }
 }

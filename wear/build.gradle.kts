@@ -83,5 +83,7 @@ dependencies {
 
     // coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
+
+    // serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
 }

@@ -2,14 +2,12 @@ package com.atakmap.android.wickr.plugin.data
 
 import android.content.Context
 import android.util.Log
-import com.atakmap.android.wickr.common.TrackedHrData
+import com.atakmap.android.wickr.common.TrackedHealthData
 import com.atakmap.android.wickr.plugin.R
-import com.atakmap.android.wickr.plugin.data.IBIDataParsing.Companion.getValidIbiList
 import com.samsung.android.service.health.tracking.HealthTracker
 import com.samsung.android.service.health.tracking.HealthTrackingService
 import com.samsung.android.service.health.tracking.data.DataPoint
 import com.samsung.android.service.health.tracking.data.HealthTrackerType
-import com.samsung.android.service.health.tracking.data.ValueKey
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
@@ -46,9 +44,9 @@ class DefaultTrackingRepo(
 
     private val maxValuesToKeep = 40
     private var heartRateTracker: HealthTracker? = null
-    private var validHrData = ArrayList<TrackedHrData>()
+    private var validHrData = ArrayList<TrackedHealthData>()
 
-    override fun getValidHrData(): ArrayList<TrackedHrData> {
+    override fun getValidHrData(): ArrayList<TrackedHealthData> {
         return validHrData
     }
 
@@ -66,13 +64,13 @@ class DefaultTrackingRepo(
         val updateListener = object : HealthTracker.TrackerEventListener {
             override fun onDataReceived(dataPoints: MutableList<DataPoint>) {
 
-                for (dataPoint in dataPoints) {
-                    var trackedData: TrackedHrData? = null
+            /*    for (dataPoint in dataPoints) {
+                    var trackedData: TrackedHealthData? = null
                     val hrValue = dataPoint.getValue(ValueKey.HeartRateSet.HEART_RATE)
                     val hrStatus = dataPoint.getValue(ValueKey.HeartRateSet.HEART_RATE_STATUS)
 
                     if (isHRValid(hrStatus)) {
-                        trackedData = TrackedHrData()
+                        trackedData = TrackedHealthData()
                         trackedData.hr = hrValue
                         Log.i(TAG, "valid HR: $hrValue")
                     } else {
@@ -83,7 +81,7 @@ class DefaultTrackingRepo(
 
                     val validIbiList = getValidIbiList(dataPoint)
                     if (validIbiList.size > 0) {
-                        if (trackedData == null) trackedData = TrackedHrData()
+                        if (trackedData == null) trackedData = TrackedHealthData()
                         trackedData.ibi.addAll(validIbiList)
                     }
 
@@ -96,7 +94,7 @@ class DefaultTrackingRepo(
                         validHrData.add(trackedData)
                     }
                 }
-                trimDataList()
+                trimDataList()*/
             }
 
             fun getError(errorKeyFromTracker: String): String {
@@ -157,7 +155,7 @@ class DefaultTrackingRepo(
 }
 
 sealed class TrackerMessage {
-    class DataMessage(val trackedData: TrackedHrData) : TrackerMessage()
+    class DataMessage(val trackedData: TrackedHealthData) : TrackerMessage()
     object FlushCompletedMessage : TrackerMessage()
     class TrackerErrorMessage(val trackerError: String) : TrackerMessage()
     class TrackerWarningMessage(val trackerWarning: String) : TrackerMessage()

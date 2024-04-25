@@ -3,7 +3,7 @@ package com.atakmap.android.wickr.plugin.activity
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.atakmap.android.wickr.common.TrackedHrData
+import com.atakmap.android.wickr.common.TrackedHealthData
 import com.atakmap.android.wickr.plugin.data.ConnectionMessage
 import com.atakmap.android.wickr.plugin.data.TrackerMessage
 import com.atakmap.android.wickr.plugin.domain.AreTrackingCapabilitiesAvailableUseCase
@@ -113,9 +113,9 @@ class MainActivityDemoViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    private fun processExerciseUpdate(trackedData: TrackedHrData) {
+    private fun processExerciseUpdate(trackedData: TrackedHealthData) {
 
-        val hr = trackedData.hr
+     /*   val hr = trackedData.hr
         val ibi = trackedData.ibi
         Log.i(TAG, "last HeartRate: $hr, last IBI: $ibi")
         currentHR = hr.toString()
@@ -127,7 +127,7 @@ class MainActivityDemoViewModel : ViewModel(), KoinComponent {
             valueHR = if (hr > 0) hr.toString() else "-",
             valueIBI = ibi,
             message = ""
-        )
+        )*/
     }
 
     private var trackingJob: Job? = null

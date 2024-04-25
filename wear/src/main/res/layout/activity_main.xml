@@ -13,19 +13,68 @@
         android:layout_height="match_parent">
 
         <Button
-            android:id="@+id/butStart"
-            android:layout_width="100dp"
+            android:id="@+id/button_alert_hr"
+            android:layout_width="44dp"
             android:layout_height="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="8dp"
             android:background="@drawable/button_background"
-            android:text="@string/StartLabel"
+            android:backgroundTint="@android:color/holo_red_dark"
+            android:text="! HR"
             android:textColor="#ffffff"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/button_alert_o2"
+            app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.86"
+            tools:ignore="TextContrastCheck,TouchTargetSizeCheck" />
+
+        <Button
+            android:id="@+id/button_alert_o2"
+            android:layout_width="44dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/button_background"
+            android:backgroundTint="@android:color/holo_red_dark"
+            android:text="! 02"
+            android:textColor="#ffffff"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/button_alert_hr"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TextContrastCheck,TouchTargetSizeCheck" />
+
+        <Button
+            android:id="@+id/button_measure_o2"
+            android:layout_width="80dp"
+            android:layout_height="28dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/button_background"
+            android:backgroundTint="@android:color/holo_green_dark"
+            android:text="@string/measure_sp_label"
+            android:textColor="#ffffff"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="TextContrastCheck,TouchTargetSizeCheck" />
+
+        <Button
+            android:id="@+id/button_send"
+            android:layout_width="80dp"
+            android:layout_height="28dp"
+            android:layout_marginBottom="6dp"
+            android:background="@drawable/button_background"
+            android:backgroundTint="@android:color/holo_blue_dark"
+            android:text="@string/send_button"
+            android:textColor="#ffffff"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toTopOf="@id/button_measure_o2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             tools:ignore="TextContrastCheck,TouchTargetSizeCheck" />
 
         <TextView
@@ -36,6 +85,7 @@
             android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="11sp"
+            android:visibility="gone"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/guideline_right"
@@ -64,7 +114,7 @@
             android:text="@string/SpO2DefaultValue"
             android:textAlignment="center"
             android:textColor="@android:color/white"
-            android:textSize="36sp"
+            android:textSize="26sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/txtPercent"
@@ -106,7 +156,7 @@
             android:text="@string/HeartRateDefaultValue"
             android:textAlignment="center"
             android:textColor="@android:color/white"
-            android:textSize="36sp"
+            android:textSize="26sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/guideline_left"
@@ -144,6 +194,15 @@
             app:trackThickness="6dp"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="0dp" />
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/wickr_logo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

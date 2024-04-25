@@ -1,6 +1,6 @@
 package com.atakmap.android.wickr.plugin.data
 
-import com.atakmap.android.wickr.common.TrackedHrData
+import com.atakmap.android.wickr.common.TrackedHealthData
 import kotlinx.coroutines.flow.Flow
 
 interface TrackingRepo {
@@ -11,5 +11,5 @@ interface TrackingRepo {
 
     fun stopTracking()
 
-    fun getValidHrData(): ArrayList<TrackedHrData>
+    fun getValidHrData(): ArrayList<TrackedHealthData>
 }

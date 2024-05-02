@@ -14,14 +14,16 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.Fragment
 import com.atakmap.android.wickr.common.TrackedHealthData
 import com.atakmap.android.wickr.plugin.R
-import com.atakmap.android.wickr.service.DataListenerService.Companion.ACTION_HEALTH_DATA_MESSAGE
-import com.atakmap.android.wickr.service.DataListenerService.Companion.EXTRA_HEALTH_DATA
+import com.atakmap.android.wickr.service.HealthWearListenerService.Companion.ACTION_HEALTH_DATA_MESSAGE
+import com.atakmap.android.wickr.service.HealthWearListenerService.Companion.EXTRA_HEALTH_DATA
 import kotlinx.serialization.json.Json
 
 class WearSampleFragment private constructor(private val pluginContext: Context) : Fragment() {
 
     companion object {
 
+        // TODO need to fix this, this is only following the previous implementaiotn of fragments
+        //  so it will fit into the old viewpager
         private var instance: WearSampleFragment? = null
 
         fun newInstance(pluginContext: Context): WearSampleFragment? {
@@ -38,9 +40,7 @@ class WearSampleFragment private constructor(private val pluginContext: Context)
     private lateinit var imageViewSpo2Alert: AppCompatImageView
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         return LayoutInflater.from(pluginContext)
             .inflate(R.layout.fragment_wear_sample, container, false)
@@ -63,9 +63,13 @@ class WearSampleFragment private constructor(private val pluginContext: Context)
         }
 
         requireContext().registerReceiver(
-            broadcastReceiver,
-            IntentFilter(ACTION_HEALTH_DATA_MESSAGE)
+            broadcastReceiver, IntentFilter(ACTION_HEALTH_DATA_MESSAGE)
         )
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 
     private val broadcastReceiver = object : BroadcastReceiver() {

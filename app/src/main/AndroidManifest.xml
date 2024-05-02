@@ -25,7 +25,7 @@
         <meta-data android:name="app_desc" android:value="@string/app_desc"/>
 
         <service
-            android:name="com.atakmap.android.wickr.service.DataListenerService"
+            android:name="com.atakmap.android.wickr.service.HealthWearListenerService"
             android:exported="true">
 
             <intent-filter>

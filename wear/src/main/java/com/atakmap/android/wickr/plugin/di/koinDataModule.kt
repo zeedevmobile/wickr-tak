@@ -13,6 +13,7 @@ import com.atakmap.android.wickr.plugin.domain.MakeConnectionToHealthTrackingSer
 import com.atakmap.android.wickr.plugin.domain.SendMessageUseCase
 import com.atakmap.android.wickr.plugin.domain.StopTrackingUseCase
 import com.atakmap.android.wickr.plugin.domain.TrackHeartRateUseCase
+import com.atakmap.android.wickr.plugin.multisensortracking.TrackerDataNotifier
 import com.google.android.gms.wearable.Wearable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -45,4 +46,6 @@ val koinDataModule = module {
     single { TrackHeartRateUseCase(get()) }
 
     single { StopTrackingUseCase(get()) }
+
+    single { TrackerDataNotifier() }
 }

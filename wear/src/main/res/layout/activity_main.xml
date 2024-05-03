@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/box_inset_layout_padding"
-    tools:context=".multisensortracking.MainActivity"
+    tools:context=".activity.MainActivity"
     tools:deviceIds="wear">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -178,7 +178,7 @@
             app:layout_constraintGuide_begin="43dp" />
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:id="@+id/progressBar"
+            android:id="@+id/progress_bar_spo2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:indeterminate="false"
@@ -190,8 +190,8 @@
             app:indicatorDirectionCircular="clockwise"
             app:indicatorSize="200dp"
             app:trackColor="#222222"
-            app:trackCornerRadius="3dp"
-            app:trackThickness="6dp"
+            app:trackCornerRadius="2dp"
+            app:trackThickness="4dp"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="0dp" />
 

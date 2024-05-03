@@ -254,16 +254,7 @@ class WickrMapComponent : DropDownMapComponent() {
          * deserialization mechanism to stuff the serialized data into the self marker.    I
          * could have copied and pasted the code if I would have liked.
          */
-     //   healthDetail?.toItemMetadata(mapView.selfMarker, null, cd)
-
-        /**
-         * Your personal self marker does not receive it's own SA messages, so lets use the
-         * deserialization mechanism to stuff the serialized data into the self marker.    I
-         * could have copied and pasted the code if I would have liked.
-         */
-        if (healthDetail != null) {
-       //     healthDetail!!.toItemMetadata(mapView.selfMarker, CotEvent(), cd)
-        }
+        healthDetail?.toItemMetadata(mapView.selfMarker, CotEvent(), cd)
 
         CotMapComponent.getInstance().addAdditionalDetail(cd.elementName, cd)
 
@@ -323,6 +314,9 @@ class WickrMapComponent : DropDownMapComponent() {
             ContactLocationView.ExtendedSelfInfoFactory {
                 object : ExtendedInfoView(pluginContext) {
                     override fun setMarker(pointMapItem: PointMapItem) {
+
+                        Log.d("XXXXX", "setMarker")
+
                         val tv = TextView(context)
                         tv.layoutParams = LayoutParams(
                             LayoutParams.WRAP_CONTENT,

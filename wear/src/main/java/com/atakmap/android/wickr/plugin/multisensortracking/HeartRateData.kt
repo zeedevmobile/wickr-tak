@@ -13,31 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.atakmap.android.wickr.plugin.multisensortracking
 
-package com.atakmap.android.wickr.plugin.multisensortracking;
+class HeartRateData {
+    var status = HeartRateStatus.HR_STATUS_NONE
+    var hr = 0
+    var ibi = 0
+    var qIbi = 1
 
-public class HeartRateData {
-    public final static int IBI_QUALITY_SHIFT = 15;
-    public final static int IBI_MASK = 0x1;
-    public final static int IBI_QUALITY_MASK = 0x7FFF;
+    internal constructor()
 
-    int status = HeartRateStatus.HR_STATUS_NONE;
-    int hr = 0;
-    int ibi = 0;
-    int qIbi = 1;
-
-    HeartRateData() {
-
+    internal constructor(status: Int, hr: Int, ibi: Int, qIbi: Int) {
+        this.status = status
+        this.hr = hr
+        this.ibi = ibi
+        this.qIbi = qIbi
     }
 
-    HeartRateData(int status, int hr, int ibi, int qIbi) {
-        this.status = status;
-        this.hr = hr;
-        this.ibi = ibi;
-        this.qIbi = qIbi;
-    }
+    val hrIbi: Int
+        get() = qIbi shl IBI_QUALITY_SHIFT or ibi
 
-    int getHrIbi() {
-        return (qIbi << IBI_QUALITY_SHIFT) | ibi;
+    companion object {
+        const val IBI_QUALITY_SHIFT = 15
+        const val IBI_MASK = 0x1
+        const val IBI_QUALITY_MASK = 0x7FFF
     }
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.atakmap.android.wickr.plugin.multisensortracking
+package com.atakmap.android.wickr.plugin.tracking
 
 import java.util.function.Consumer
 

@@ -1,6 +1,7 @@
 package com.atakmap.android.wickr.plugin.activity
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.WindowManager
@@ -8,11 +9,14 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import com.atakmap.android.wickr.plugin.R
-import com.atakmap.android.wickr.plugin.multisensortracking.SpO2Status
+import com.atakmap.android.wickr.plugin.activity.AlertActivity.Companion.EXTRA_EVENT_TYPE
+import com.atakmap.android.wickr.plugin.tracking.SpO2Status
 import com.google.android.material.progressindicator.CircularProgressIndicator
+import com.zeedev.utilities.extensions.getSerializableExtraCompat
 
 class MainActivity : ComponentActivity() {
 
@@ -23,6 +27,18 @@ class MainActivity : ComponentActivity() {
     private lateinit var txtSpo2: TextView
     private lateinit var buttonStart: Button
     private lateinit var measurementProgress: CircularProgressIndicator
+
+    private var resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val alertType: AlertActivity.AlertType =
+                    result.data?.getSerializableExtraCompat(EXTRA_EVENT_TYPE)!!
+                when (alertType) {
+                    AlertActivity.AlertType.HEART_RATE -> viewModel.sendHrAlert()
+                    AlertActivity.AlertType.SPO2 -> viewModel.sendSpO2Alert()
+                }
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,12 +57,20 @@ class MainActivity : ComponentActivity() {
         findViewById<Button>(R.id.button_alert_hr).apply {
             setOnClickListener {
                 viewModel.sendHrAlert()
+                Intent(this@MainActivity, AlertActivity::class.java).let {
+                    it.putExtra(EXTRA_EVENT_TYPE, AlertActivity.AlertType.HEART_RATE)
+                    resultLauncher.launch(it)
+                }
             }
         }
 
         findViewById<Button>(R.id.button_alert_o2)?.apply {
             setOnClickListener {
                 viewModel.sendSpO2Alert()
+                Intent(this@MainActivity, AlertActivity::class.java).let {
+                    it.putExtra(EXTRA_EVENT_TYPE, AlertActivity.AlertType.SPO2)
+                    resultLauncher.launch(it)
+                }
             }
         }
 
@@ -90,6 +114,7 @@ class MainActivity : ComponentActivity() {
                     buttonStart.setText(R.string.measure_sp_label)
                     R.string.spo2_cancelled
                 }
+
                 SpO2Status.CALCULATING -> {
                     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                     buttonStart.setText(R.string.StopLabel)

@@ -1,4 +1,4 @@
-package com.atakmap.android.wickr.plugin.multisensortracking
+package com.atakmap.android.wickr.plugin.tracking
 
 import com.atakmap.android.wickr.plugin.R
 import com.samsung.android.service.health.tracking.HealthTracker.TrackerError
@@ -8,15 +8,15 @@ import com.samsung.android.service.health.tracking.data.ValueKey
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
-class SpO2Listener internal constructor() : BaseListener(), KoinComponent {
+class HeartRateListener internal constructor() : BaseListener(), KoinComponent {
 
     private val trackerDataNotifier: TrackerDataNotifier = get()
 
     init {
         val trackerEventListener: TrackerEventListener = object : TrackerEventListener {
             override fun onDataReceived(list: List<DataPoint>) {
-                for (data in list) {
-                    updateSpo2(data)
+                for (dataPoint in list) {
+                    readValuesFromDataPoint(dataPoint)
                 }
             }
 
@@ -38,11 +38,18 @@ class SpO2Listener internal constructor() : BaseListener(), KoinComponent {
         setTrackerEventListener(trackerEventListener)
     }
 
-    fun updateSpo2(dataPoint: DataPoint) {
-        val status = dataPoint.getValue(ValueKey.SpO2Set.STATUS)
-        var spo2Value = 0
-        if (status == SpO2Status.MEASUREMENT_COMPLETED) spo2Value =
-            dataPoint.getValue(ValueKey.SpO2Set.SPO2)
-        trackerDataNotifier.notifySpO2TrackerObservers(status, spo2Value)
+    fun readValuesFromDataPoint(dataPoint: DataPoint) {
+        val hrData = HeartRateData()
+        val hrIbiList = dataPoint.getValue(ValueKey.HeartRateSet.IBI_LIST)
+        val hrIbiStatus = dataPoint.getValue(ValueKey.HeartRateSet.IBI_STATUS_LIST)
+        hrData.status = dataPoint.getValue(ValueKey.HeartRateSet.HEART_RATE_STATUS)
+        hrData.hr = dataPoint.getValue(ValueKey.HeartRateSet.HEART_RATE)
+        if (hrIbiList != null && hrIbiList.size != 0) {
+            hrData.ibi = hrIbiList[hrIbiList.size - 1] // Inter-Beat Interval (ms)
+        }
+        if (hrIbiStatus != null && hrIbiStatus.size != 0) {
+            hrData.qIbi = hrIbiStatus.size - 1 // 1: bad, 0: good
+        }
+        trackerDataNotifier.notifyHeartRateTrackerObservers(hrData)
     }
 }

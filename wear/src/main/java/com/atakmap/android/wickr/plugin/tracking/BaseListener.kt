@@ -1,4 +1,4 @@
-package com.atakmap.android.wickr.plugin.multisensortracking
+package com.atakmap.android.wickr.plugin.tracking
 
 import android.os.Handler
 import com.samsung.android.service.health.tracking.HealthTracker

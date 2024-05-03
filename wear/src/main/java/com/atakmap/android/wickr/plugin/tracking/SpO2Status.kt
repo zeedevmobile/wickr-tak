@@ -1,4 +1,4 @@
-package com.atakmap.android.wickr.plugin.multisensortracking
+package com.atakmap.android.wickr.plugin.tracking
 
 object SpO2Status {
     const val LOW_SIGNAL = -5

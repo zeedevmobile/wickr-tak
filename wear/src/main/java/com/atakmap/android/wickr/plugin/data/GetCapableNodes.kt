@@ -1,6 +1,5 @@
-package com.atakmap.android.wickr.plugin.domain
+package com.atakmap.android.wickr.plugin.data
 
-import com.atakmap.android.wickr.plugin.data.CapabilityRepo
 import com.google.android.gms.wearable.Node
 
 class GetCapableNodes(private val capabilityRepo: CapabilityRepo) {

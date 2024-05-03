@@ -1,4 +1,4 @@
-package com.atakmap.android.wickr.plugin.multisensortracking
+package com.atakmap.android.wickr.plugin.tracking
 
 object HeartRateStatus {
     const val HR_STATUS_NONE = 0

@@ -1,4 +1,4 @@
-package com.atakmap.android.wickr.plugin.multisensortracking
+package com.atakmap.android.wickr.plugin.tracking
 
 import android.content.Context
 import android.os.Handler

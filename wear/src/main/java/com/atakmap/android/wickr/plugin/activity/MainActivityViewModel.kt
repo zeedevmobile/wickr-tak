@@ -7,15 +7,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.atakmap.android.wickr.common.TrackedHealthData
 import com.atakmap.android.wickr.plugin.R
+import com.atakmap.android.wickr.plugin.data.GetCapableNodes
 import com.atakmap.android.wickr.plugin.data.MessageRepo
-import com.atakmap.android.wickr.plugin.domain.GetCapableNodes
-import com.atakmap.android.wickr.plugin.multisensortracking.ConnectionManager
-import com.atakmap.android.wickr.plugin.multisensortracking.HeartRateData
-import com.atakmap.android.wickr.plugin.multisensortracking.HeartRateListener
-import com.atakmap.android.wickr.plugin.multisensortracking.SpO2Listener
-import com.atakmap.android.wickr.plugin.multisensortracking.SpO2Status
-import com.atakmap.android.wickr.plugin.multisensortracking.TrackerDataNotifier
-import com.atakmap.android.wickr.plugin.multisensortracking.TrackerDataObserver
+import com.atakmap.android.wickr.plugin.tracking.ConnectionManager
+import com.atakmap.android.wickr.plugin.tracking.HeartRateData
+import com.atakmap.android.wickr.plugin.tracking.HeartRateListener
+import com.atakmap.android.wickr.plugin.tracking.SpO2Listener
+import com.atakmap.android.wickr.plugin.tracking.SpO2Status
+import com.atakmap.android.wickr.plugin.tracking.TrackerDataNotifier
+import com.atakmap.android.wickr.plugin.tracking.TrackerDataObserver
 import com.atakmap.android.wickr.plugin.utilities.SingleLiveData
 import com.samsung.android.service.health.tracking.HealthTrackerException
 import kotlinx.coroutines.launch
@@ -38,7 +38,6 @@ class MainActivityViewModel(application: Application) :
     private val trackerDataNotifier: TrackerDataNotifier = get()
     private val messageRepo: MessageRepo = get()
     private val getCapableNodes: GetCapableNodes = get()
-
     private var connectionManager: ConnectionManager? = null
     private var heartRateListener: HeartRateListener = HeartRateListener()
     private var spO2Listener: SpO2Listener = SpO2Listener()
@@ -106,9 +105,9 @@ class MainActivityViewModel(application: Application) :
                 val node = nodes.first()
                 encodeHrData(
                     TrackedHealthData(
+                        175,
                         null,
-                        null,
-                        160,
+                        175,
                         null
                     )
                 ).also {
@@ -130,7 +129,7 @@ class MainActivityViewModel(application: Application) :
                 encodeHrData(
                     TrackedHealthData(
                         null,
-                        null,
+                        84,
                         null,
                         84
                     )

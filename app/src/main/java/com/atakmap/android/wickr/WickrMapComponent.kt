@@ -4,8 +4,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.graphics.Color
-import android.widget.TextView
+import android.view.LayoutInflater
+import androidx.appcompat.widget.AppCompatTextView
 import com.atakmap.android.contact.ContactLocationView
 import com.atakmap.android.cot.CotMapComponent
 import com.atakmap.android.cot.detail.CotDetailHandler
@@ -315,33 +315,32 @@ class WickrMapComponent : DropDownMapComponent() {
                 object : ExtendedInfoView(pluginContext) {
                     override fun setMarker(pointMapItem: PointMapItem) {
 
-                        Log.d("XXXXX", "setMarker")
+                        val layout = LayoutInflater.from(context)
+                            .inflate(R.layout.layout_marker_wear_data, this)
 
-                        val tv = TextView(context)
-                        tv.layoutParams = LayoutParams(
-                            LayoutParams.WRAP_CONTENT,
-                            LayoutParams.WRAP_CONTENT
-                        )
-                        val heartRate = pointMapItem.getMetaString(
+                        val textViewHr =
+                            layout.findViewById<AppCompatTextView>(R.id.textview_marker_wear_data_hr)
+
+                        val textViewSpO2 =
+                            layout.findViewById<AppCompatTextView>(R.id.textview_marker_wear_data_spo2)
+
+                        var heartRate = pointMapItem.getMetaString(
                             "WickrWearPlugin.heartRate",
                             null
                         )
-                        val spO2 = pointMapItem.getMetaString(
+                        var spO2 = pointMapItem.getMetaString(
                             "WickrWearPlugin.spO2",
                             null
                         )
 
-                        if (heartRate.isNullOrEmpty()) {
-                            tv.visibility = GONE
-                        } else {
-                            tv.visibility = VISIBLE
-                            tv.text = ("HeartRate\n\t: $heartRate spO2: $spO2\n")
-                            if (spO2.isNullOrEmpty()) tv.setTextColor(Color.RED) else tv.setTextColor(
-                                Color.GREEN
-                            )
-                        }
+                        if (spO2.isNullOrEmpty() || spO2 == "null") spO2 = "--"
+                        if (heartRate.isNullOrEmpty() || heartRate == "null") heartRate = "--"
 
-                        addView(tv)
+                        textViewHr.text = heartRate
+                        textViewSpO2.text = spO2
+                        addView(layout)
+
+                        mapView.invalidate()
                     }
                 }
             }.also {

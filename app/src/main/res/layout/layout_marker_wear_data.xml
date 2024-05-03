@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingTop="8dp">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textview_marker_wear_data_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Health Data"
+        android:textColor="@android:color/holo_orange_light"
+        android:textSize="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageview_marker_wear_data_hr_icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="4dp"
+        android:src="@drawable/ic_hr"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textview_marker_wear_data_title"
+        app:tint="@android:color/holo_red_dark" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textview_marker_wear_data_hr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textColor="@android:color/white"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageview_marker_wear_data_hr_icon"
+        app:layout_constraintStart_toEndOf="@id/imageview_marker_wear_data_hr_icon"
+        app:layout_constraintTop_toTopOf="@id/imageview_marker_wear_data_hr_icon"
+        tools:ignore="SpUsage" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageview_marker_wear_data_spo2_icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="4dp"
+        android:src="@drawable/ic_spo2"
+        app:layout_constraintStart_toEndOf="@id/textview_marker_wear_data_hr"
+        app:layout_constraintTop_toBottomOf="@id/textview_marker_wear_data_title"
+        app:tint="@android:color/holo_blue_light" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textview_marker_wear_data_spo2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textColor="@android:color/white"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageview_marker_wear_data_spo2_icon"
+        app:layout_constraintStart_toEndOf="@id/imageview_marker_wear_data_spo2_icon"
+        app:layout_constraintTop_toTopOf="@id/imageview_marker_wear_data_spo2_icon"
+        tools:ignore="SpUsage" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

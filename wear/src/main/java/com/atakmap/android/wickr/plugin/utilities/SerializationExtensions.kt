@@ -1,4 +1,4 @@
-package com.zeedev.utilities.extensions
+package com.atakmap.android.wickr.plugin.utilities
 
 import android.content.Intent
 import android.os.Build

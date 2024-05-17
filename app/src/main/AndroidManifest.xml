@@ -35,10 +35,12 @@
                 <action android:name="com.google.android.gms.wearable.CAPABILITY_CHANGED" />
                 <action android:name="com.google.android.gms.wearable.CHANNEL_EVENT" />
 
-                <data
-                    android:host="*"
-                    android:pathPrefix="/msg"
-                    android:scheme="wear" />
+                <data android:scheme="wear"/>
+                <data android:host="*"/>
+                <data android:pathPrefix="/msg"/>
+                <data android:pathPrefix="/msg/wear_hr_data"/>
+                <data android:pathPrefix="/msg/wear_spo2_data"/>
+
             </intent-filter>
         </service>
 

@@ -12,11 +12,11 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.Fragment
-import com.atakmap.android.wickr.common.TrackedHealthData
 import com.atakmap.android.wickr.plugin.R
-import com.atakmap.android.wickr.service.HealthWearListenerService.Companion.ACTION_HEALTH_DATA_MESSAGE
+import com.atakmap.android.wickr.service.HealthWearListenerService.Companion.ACTION_HEALTH_DATA_HR_UPDATE
+import com.atakmap.android.wickr.service.HealthWearListenerService.Companion.ACTION_HEALTH_DATA_SPO2_UPDATE
 import com.atakmap.android.wickr.service.HealthWearListenerService.Companion.EXTRA_HEALTH_DATA
-import kotlinx.serialization.json.Json
+import com.atakmap.android.wickr.service.HealthWearListenerService.Companion.EXTRA_IS_ABNORMAL
 
 class WearSampleFragment private constructor(private val pluginContext: Context) : Fragment() {
 
@@ -28,7 +28,7 @@ class WearSampleFragment private constructor(private val pluginContext: Context)
 
         fun newInstance(pluginContext: Context): WearSampleFragment? {
             if (instance == null) {
-                WearSampleFragment.instance = WearSampleFragment(pluginContext)
+                instance = WearSampleFragment(pluginContext)
             }
             return instance
         }
@@ -57,52 +57,51 @@ class WearSampleFragment private constructor(private val pluginContext: Context)
         imageViewHrAlert.setOnClickListener {
             imageViewHrAlert.visibility = View.GONE
         }
+
         imageViewSpo2Alert = view.findViewById(R.id.imageview_spo2_alert)
         imageViewSpo2Alert.setOnClickListener {
             imageViewSpo2Alert.visibility = View.GONE
         }
 
         requireContext().registerReceiver(
-            broadcastReceiver, IntentFilter(ACTION_HEALTH_DATA_MESSAGE)
+            broadcastReceiver, IntentFilter().apply {
+                addAction(ACTION_HEALTH_DATA_SPO2_UPDATE)
+                addAction(ACTION_HEALTH_DATA_HR_UPDATE)
+            }
         )
-
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        try {
+            requireContext().unregisterReceiver(broadcastReceiver)
+        } catch (exception: Exception) {
+            // no-op
+        }
     }
 
     private val broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(contxt: Context?, intent: Intent?) {
-            if (intent?.action == ACTION_HEALTH_DATA_MESSAGE) {
-                intent.getStringExtra(EXTRA_HEALTH_DATA)?.let { data ->
-                    decodeString(data)?.let {
 
-                        if (it.hr != null) {
-                            textViewHr.text = it.hr.toString()
-                        }
-                        if (it.spO2 != null) {
-                            textViewSpO2.text = it.spO2.toString()
-                        }
-                        if (it.hrAlert != null) {
-                            imageViewHrAlert.visibility =
-                                if (imageViewHrAlert.visibility == View.VISIBLE) View.GONE else View.VISIBLE
-                        }
-                        if (it.spO2Alert != null) {
-                            imageViewSpo2Alert.visibility =
-                                if (imageViewSpo2Alert.visibility == View.VISIBLE) View.GONE else View.VISIBLE
-                        }
+            when (intent?.action) {
+                ACTION_HEALTH_DATA_HR_UPDATE -> {
+                    intent.getIntExtra(EXTRA_HEALTH_DATA, 0).let {
+                        textViewHr.text = if (it > 0) it.toString() else "--"
+                    }
+                    intent.getBooleanExtra(EXTRA_IS_ABNORMAL, false).let {
+                        imageViewHrAlert.visibility = if (it) View.VISIBLE else View.GONE
+                    }
+                }
+
+                ACTION_HEALTH_DATA_SPO2_UPDATE -> {
+                    intent.getIntExtra(EXTRA_HEALTH_DATA, 0).let {
+                        textViewSpO2.text = if (it > 0) it.toString() else "--"
+                    }
+                    intent.getBooleanExtra(EXTRA_IS_ABNORMAL, false).let {
+                        imageViewSpo2Alert.visibility = if (it) View.VISIBLE else View.GONE
                     }
                 }
             }
-        }
-    }
-
-    private fun decodeString(data: String): TrackedHealthData? {
-        return try {
-            Json.decodeFromString<TrackedHealthData>(data)
-        } catch (exception: Error) {
-            null
         }
     }
 }

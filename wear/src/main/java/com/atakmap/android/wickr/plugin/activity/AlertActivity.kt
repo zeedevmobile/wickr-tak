@@ -16,7 +16,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.atakmap.android.wickr.plugin.R
-import com.zeedev.utilities.extensions.getSerializableExtraCompat
+import com.atakmap.android.wickr.plugin.utilities.getSerializableExtraCompat
 
 
 class AlertActivity : ComponentActivity() {

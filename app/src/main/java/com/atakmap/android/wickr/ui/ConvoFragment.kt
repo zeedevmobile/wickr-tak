@@ -1,5 +1,6 @@
 package com.atakmap.android.wickr.ui
 
+import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -31,10 +32,12 @@ import com.atakmap.android.wickr.WickrMapComponent
 import com.atakmap.android.wickr.WickrMessageListEvent
 import com.atakmap.android.wickr.WickrMessageSendEvent
 import com.atakmap.android.wickr.WickrMessageUpdateResponse
-import com.atakmap.android.wickr.common.TrackedHealthData
 import com.atakmap.android.wickr.plugin.R
 import com.atakmap.android.wickr.plugin.WickrTool
-import com.atakmap.android.wickr.service.HealthWearListenerService
+import com.atakmap.android.wickr.service.HealthWearListenerService.Companion.ACTION_HEALTH_DATA_HR_UPDATE
+import com.atakmap.android.wickr.service.HealthWearListenerService.Companion.ACTION_HEALTH_DATA_SPO2_UPDATE
+import com.atakmap.android.wickr.service.HealthWearListenerService.Companion.EXTRA_HEALTH_DATA
+import com.atakmap.android.wickr.service.HealthWearListenerService.Companion.EXTRA_IS_ABNORMAL
 import com.atakmap.android.wickr.ui.adapters.MessageClickListener
 import com.atakmap.android.wickr.ui.adapters.WickrMessageAdapter
 import com.atakmap.android.wickr.ui.util.FileUtils
@@ -51,11 +54,9 @@ import kotlinx.android.synthetic.main.conversation_view.messageText
 import kotlinx.android.synthetic.main.conversation_view.moreInfo
 import kotlinx.android.synthetic.main.conversation_view.send_ib
 import kotlinx.android.synthetic.main.conversation_view.voiceMessage
-import kotlinx.serialization.json.Json
 import org.greenrobot.eventbus.Subscribe
 import java.util.Timer
 import kotlin.concurrent.timerTask
-
 
 class ConvoFragment(
     val pluginContext: Context,
@@ -91,21 +92,19 @@ class ConvoFragment(
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
 
         return LayoutInflater.from(pluginContext)
             .inflate(R.layout.conversation_view, container, false)
     }
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        moreInfo.visibility = if (convo?.type == WickrAPIObjects.WickrConvo.ConvoType.ROOM ||
-            convo?.type == WickrAPIObjects.WickrConvo.ConvoType.GROUP
-        ) View.VISIBLE else View.GONE
+        moreInfo.visibility =
+            if (convo?.type == WickrAPIObjects.WickrConvo.ConvoType.ROOM || convo?.type == WickrAPIObjects.WickrConvo.ConvoType.GROUP) View.VISIBLE else View.GONE
         moreInfo.setOnClickListener {
             WickrMapComponent.EVENTBUS.post(RoomOrGroupDetailsEvent(convo))
         }
@@ -163,8 +162,7 @@ class ConvoFragment(
         })
 
         call_ib.setOnClickListener {
-            if (convo?.id != null)
-                requests.startCall(convo!!.id)
+            if (convo?.id != null) requests.startCall(convo!!.id)
         }
 
         fileUploadButton.setOnClickListener {
@@ -189,16 +187,19 @@ class ConvoFragment(
             messageText.setText("")
         }
 
-        back_ib.setOnClickListener(View.OnClickListener {
+        back_ib.setOnClickListener {
             if (standAlone) {
                 WickrMapComponent.EVENTBUS.post(RequestCloseDropDownEvent())
             } else {
                 WickrMapComponent.EVENTBUS.post(PopFragmentEvent())
             }
-        })
+        }
 
         requireContext().registerReceiver(
-            broadcastReceiver, IntentFilter(HealthWearListenerService.ACTION_HEALTH_DATA_MESSAGE)
+            broadcastReceiver, IntentFilter().apply {
+                addAction(ACTION_HEALTH_DATA_SPO2_UPDATE)
+                addAction(ACTION_HEALTH_DATA_HR_UPDATE)
+            }
         )
     }
 
@@ -274,9 +275,7 @@ class ConvoFragment(
                     val errorMessage = "The API was unable to send the message: ${event.error.name}"
                     Log.e(TAG, errorMessage)
                     Toast.makeText(
-                        MapView.getMapView().context,
-                        "Failed to send message",
-                        Toast.LENGTH_SHORT
+                        MapView.getMapView().context, "Failed to send message", Toast.LENGTH_SHORT
                     ).show()
                     //Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
                 }
@@ -290,18 +289,16 @@ class ConvoFragment(
 
     override fun onLockedMessageClicked(messageID: String, lockedMessageIds: List<String>) {
         val key = settingsManager.getKey() ?: return
-        val unlockMessageRequest = WickrAPIRequests.UnlockMessageRequest.newBuilder()
-            .setMessageID(messageID)
-            .addAllLockedMessageIDs(lockedMessageIds)
-            .build()
+        val unlockMessageRequest =
+            WickrAPIRequests.UnlockMessageRequest.newBuilder().setMessageID(messageID)
+                .addAllLockedMessageIDs(lockedMessageIds).build()
         val requestIntent =
             WickrAPI.createRequestIntent(Requests.PACKAGE_NAME, unlockMessageRequest, key)
         AtakBroadcast.getInstance().sendSystemBroadcast(requestIntent);
     }
 
     override fun onFileMessageClicked(
-        messageID: String,
-        fileMessage: WickrAPIObjects.WickrMessage.FileMessage
+        messageID: String, fileMessage: WickrAPIObjects.WickrMessage.FileMessage
     ) {
         val fileState = fileMessage.state
         Log.d(TAG, "File state: ${fileState.name}")
@@ -343,11 +340,9 @@ class ConvoFragment(
             TAG,
             "Requesting page of messages for $convo.id with count $PAGE_SIZE and offset ${adapter.itemCount}"
         )
-        val getMessagesRequest = WickrAPIRequests.GetMessagesRequest.newBuilder()
-            .setConvoID(convo?.id)
-            .setCount(PAGE_SIZE)
-            .setOffset(adapter.itemCount)
-            .build()
+        val getMessagesRequest =
+            WickrAPIRequests.GetMessagesRequest.newBuilder().setConvoID(convo?.id)
+                .setCount(PAGE_SIZE).setOffset(adapter.itemCount).build()
         val requestIntent =
             WickrAPI.createRequestIntent(Requests.PACKAGE_NAME, getMessagesRequest, key)
         AtakBroadcast.getInstance().sendSystemBroadcast(requestIntent)
@@ -386,33 +381,28 @@ class ConvoFragment(
 
     private val broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(contxt: Context?, intent: Intent?) {
-            if (intent?.action == HealthWearListenerService.ACTION_HEALTH_DATA_MESSAGE) {
-                intent.getStringExtra(HealthWearListenerService.EXTRA_HEALTH_DATA)?.let { data ->
-                    decodeString(data)?.let {
+            Log.d("XXXXX", "message received ConvoFragment")
+            when (intent?.action) {
+                ACTION_HEALTH_DATA_HR_UPDATE -> {
+                    if (!intent.getBooleanExtra(EXTRA_IS_ABNORMAL, false)) return
+                    intent.getIntExtra(EXTRA_HEALTH_DATA, 0).let {
+                        Log.d("XXXXX", "ACTION_HEALTH_DATA_HR_UPDATE")
+                        requests.sendTextMessage(
+                            "Automated Alert: Heart rate - $it", convo?.id ?: ""
+                        )
+                    }
+                }
 
-                        if (it.hrAlert != null) {
-                            requests.sendTextMessage(
-                                "Automated Alert: Heart rate - ${it.hr}",
-                                convo?.id ?: ""
-                            )
-                        }
-                        else if (it.spO2Alert != null) {
-                            requests.sendTextMessage(
-                                "Automated Alert: SpO2 - ${it.spO2}",
-                                convo?.id ?: ""
-                            )
-                        }
+                ACTION_HEALTH_DATA_SPO2_UPDATE -> {
+                    if (!intent.getBooleanExtra(EXTRA_IS_ABNORMAL, false)) return
+                    intent.getIntExtra(EXTRA_HEALTH_DATA, 0).let {
+                        Log.d("XXXXX", "ACTION_HEALTH_DATA_SPO2_UPDATE")
+                        requests.sendTextMessage(
+                            "Automated Alert: SpO2 - $it", convo?.id ?: ""
+                        )
                     }
                 }
             }
-        }
-    }
-
-    private fun decodeString(data: String): TrackedHealthData? {
-        return try {
-            Json.decodeFromString<TrackedHealthData>(data)
-        } catch (exception: Error) {
-            null
         }
     }
 }

@@ -5,7 +5,10 @@ import android.os.CountDownTimer
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.atakmap.android.wickr.common.TrackedHealthData
+import com.atakmap.android.wickr.common.MESSAGE_PATH_WEAR_HR_DATA
+import com.atakmap.android.wickr.common.MESSAGE_PATH_WEAR_SPO2_DATA
+import com.atakmap.android.wickr.common.WearTrackedHrData
+import com.atakmap.android.wickr.common.WearTrackedSpO2Data
 import com.atakmap.android.wickr.plugin.R
 import com.atakmap.android.wickr.plugin.data.GetCapableNodes
 import com.atakmap.android.wickr.plugin.data.MessageRepo
@@ -25,12 +28,10 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import java.util.concurrent.atomic.AtomicBoolean
 
-class MainActivityViewModel(application: Application) :
-    AndroidViewModel(application),
+class MainActivityViewModel(application: Application) : AndroidViewModel(application),
     KoinComponent {
 
     companion object {
-        private const val MESSAGE_PATH = "/msg"
         private const val MEASUREMENT_DURATION = 35000
         private const val MEASUREMENT_TICK = 250
     }
@@ -41,10 +42,7 @@ class MainActivityViewModel(application: Application) :
     private var connectionManager: ConnectionManager? = null
     private var heartRateListener: HeartRateListener = HeartRateListener()
     private var spO2Listener: SpO2Listener = SpO2Listener()
-
-
     private val isMeasurementRunning = AtomicBoolean(false)
-
     private var currentHr: Int? = null
     private var currentSpO2: Int? = null
     private var currentSpO2MeasurementStatus = SpO2Status.INITIAL_STATUS
@@ -72,25 +70,15 @@ class MainActivityViewModel(application: Application) :
 
     fun connect() {
         connectionManager = ConnectionManager(connectionObserver)
-        connectionManager!!.connect(getApplication<Application>().applicationContext)
+        connectionManager?.connect(getApplication<Application>().applicationContext)
     }
 
     fun sendData() {
         viewModelScope.launch {
             val nodes = getCapableNodes()
             if (nodes.isNotEmpty()) {
-                val node = nodes.first()
-                encodeHrData(
-                    TrackedHealthData(
-                        currentHr,
-                        currentSpO2,
-                        null,
-                        null
-                    )
-                ).also {
-                    messageRepo.sendMessage(it, node, MESSAGE_PATH)
-                }
-
+                currentHr?.let { sendHrData(it, false) }
+                currentSpO2?.let { sendSpO2Data(it, false) }
                 statusUpdates.postValue(R.string.health_update_success)
             } else {
                 statusUpdates.postValue(R.string.health_update_failed)
@@ -98,20 +86,15 @@ class MainActivityViewModel(application: Application) :
         }
     }
 
-    fun sendHrAlert() {
+    fun sendSpO2Data(sPo2: Int, abnormal: Boolean) {
         viewModelScope.launch {
             val nodes = getCapableNodes()
             if (nodes.isNotEmpty()) {
                 val node = nodes.first()
-                encodeHrData(
-                    TrackedHealthData(
-                        175,
-                        null,
-                        175,
-                        null
-                    )
-                ).also {
-                    messageRepo.sendMessage(it, node, MESSAGE_PATH)
+                Json.encodeToString(
+                    WearTrackedSpO2Data(sPo2, abnormal)
+                ).let {
+                    messageRepo.sendMessage(it, node, MESSAGE_PATH_WEAR_SPO2_DATA)
                 }
 
                 statusUpdates.postValue(R.string.health_update_success)
@@ -121,30 +104,22 @@ class MainActivityViewModel(application: Application) :
         }
     }
 
-    fun sendSpO2Alert() {
+    fun sendHrData(hr: Int, abnormal: Boolean) {
         viewModelScope.launch {
             val nodes = getCapableNodes()
             if (nodes.isNotEmpty()) {
                 val node = nodes.first()
-                encodeHrData(
-                    TrackedHealthData(
-                        null,
-                        84,
-                        null,
-                        84
-                    )
-                ).also {
-                    messageRepo.sendMessage(it, node, MESSAGE_PATH)
+                Json.encodeToString(
+                    WearTrackedHrData(hr, abnormal)
+                ).let {
+                    messageRepo.sendMessage(it, node, MESSAGE_PATH_WEAR_HR_DATA)
                 }
+
                 statusUpdates.postValue(R.string.health_update_success)
             } else {
                 statusUpdates.postValue(R.string.health_update_failed)
             }
         }
-    }
-
-    private fun encodeHrData(trackedData: TrackedHealthData): String {
-        return Json.encodeToString(trackedData)
     }
 
     fun measureSpO2() {
@@ -182,9 +157,7 @@ class MainActivityViewModel(application: Application) :
             }
 
             override fun onError(healthTrackerException: HealthTrackerException) {
-                if (healthTrackerException.errorCode == HealthTrackerException.OLD_PLATFORM_VERSION ||
-                    healthTrackerException.errorCode == HealthTrackerException.PACKAGE_NOT_INSTALLED
-                ) {
+                if (healthTrackerException.errorCode == HealthTrackerException.OLD_PLATFORM_VERSION || healthTrackerException.errorCode == HealthTrackerException.PACKAGE_NOT_INSTALLED) {
                     statusUpdates.postValue(R.string.hs_version_outdated)
                 }
 
@@ -222,23 +195,21 @@ class MainActivityViewModel(application: Application) :
     }
 
     // Temporary to show SpO2 progress on demo SDK
-    private val countDownTimer: CountDownTimer =
-        object : CountDownTimer(
-            MEASUREMENT_DURATION.toLong(),
-            MEASUREMENT_TICK.toLong()
-        ) {
-            override fun onTick(timeLeft: Long) {
-                if (isMeasurementRunning.get()) {
-                    val updatedValue = spO2MeasurementProgress.value!! + 1
-                    spO2MeasurementProgress.postValue(updatedValue)
-                } else cancel()
-            }
-
-            override fun onFinish() {
-                if (!isMeasurementRunning.get()) return
-                spO2MeasurementProgress.postValue(0)
-                spO2Listener.stopTracker()
-                isMeasurementRunning.set(false)
-            }
+    private val countDownTimer: CountDownTimer = object : CountDownTimer(
+        MEASUREMENT_DURATION.toLong(), MEASUREMENT_TICK.toLong()
+    ) {
+        override fun onTick(timeLeft: Long) {
+            if (isMeasurementRunning.get()) {
+                val updatedValue = spO2MeasurementProgress.value!! + 1
+                spO2MeasurementProgress.postValue(updatedValue)
+            } else cancel()
         }
+
+        override fun onFinish() {
+            if (!isMeasurementRunning.get()) return
+            spO2MeasurementProgress.postValue(0)
+            spO2Listener.stopTracker()
+            isMeasurementRunning.set(false)
+        }
+    }
 }

@@ -1,7 +1,6 @@
 package com.atakmap.android.wickr.ui.util
 
 import android.app.Activity
-import android.util.Log
 import com.atakmap.android.maps.MapView
 import com.atakmap.android.wickr.WickrAPIPairedEvent
 import com.atakmap.android.wickr.WickrAPIUnpairedEvent
@@ -21,7 +20,6 @@ class ConvoReceiver(private val adapter: WickrConvoAdapter, private val convoTyp
 
         when (event) {
             is WickrConvoListEvent -> mapActivity?.runOnUiThread {
-                Log.d("XXXXX", "WickrConvoListEvent")
                 if (event.identifier == convoType.name) adapter.setItems(event.convos)
             }
             is WickrConvoUpdateEvent -> mapActivity?.runOnUiThread {

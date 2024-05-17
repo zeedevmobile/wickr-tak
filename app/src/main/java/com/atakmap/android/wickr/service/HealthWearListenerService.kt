@@ -18,35 +18,56 @@ package com.atakmap.android.wickr.service
 
 import android.content.Intent
 import android.util.Log
+import com.atakmap.android.wickr.common.MESSAGE_PATH_WEAR_HR_DATA
+import com.atakmap.android.wickr.common.MESSAGE_PATH_WEAR_SPO2_DATA
+import com.atakmap.android.wickr.common.WearTrackedHrData
+import com.atakmap.android.wickr.common.WearTrackedSpO2Data
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.WearableListenerService
-
-private const val TAG = "DataListenerService"
-private const val MESSAGE_PATH = "/msg"
+import kotlinx.serialization.json.Json
 
 class HealthWearListenerService : WearableListenerService() {
 
     companion object {
-        const val COT_DETAIL_NAME = "wear_health_details"
-        const val ACTION_HEALTH_DATA_MESSAGE = "ACTION_HEALTH_DATA_MESSAGE"
+        private const val TAG = "HealthWearListenerService"
+
+        const val ACTION_HEALTH_DATA_HR_UPDATE = "ACTION_HEALTH_DATA_HR_UPDATE"
+        const val ACTION_HEALTH_DATA_SPO2_UPDATE = "ACTION_HEALTH_DATA_SPO2_UPDATE"
         const val EXTRA_HEALTH_DATA = "EXTRA_HEALTH_DATA"
+        const val EXTRA_IS_ABNORMAL = "EXTRA_IS_ABNORMAL"
     }
 
     override fun onMessageReceived(messageEvent: MessageEvent) {
         super.onMessageReceived(messageEvent)
 
-        if (messageEvent.path == MESSAGE_PATH) {
-            val data = messageEvent.data.decodeToString()
-            Log.i(TAG, "Service: message (/msg) received: $data")
+        val decodedDataString = messageEvent.data.decodeToString()
+        if (decodedDataString.isEmpty()) {
+            Log.d(TAG, "data is empty")
+            return
+        }
+        Log.i(TAG, "Service: message path: ${messageEvent.path} received: $decodedDataString")
 
-            if (data.isNotEmpty()) {
-                Intent().also {
-                    it.action = ACTION_HEALTH_DATA_MESSAGE
-                    it.putExtra(EXTRA_HEALTH_DATA, data)
-                    sendBroadcast(it)
+        when (messageEvent.path) {
+            MESSAGE_PATH_WEAR_HR_DATA -> {
+                Json.decodeFromString<WearTrackedHrData>(decodedDataString).let {
+                    Intent().also { intent ->
+                        intent.action = ACTION_HEALTH_DATA_HR_UPDATE
+                        intent.putExtra(EXTRA_HEALTH_DATA, it.hr)
+                        intent.putExtra(EXTRA_IS_ABNORMAL, it.abnormal)
+                        sendBroadcast(intent)
+                    }
                 }
-            } else {
-                Log.i(TAG, "data is empty")
+            }
+
+            MESSAGE_PATH_WEAR_SPO2_DATA -> {
+                Json.decodeFromString<WearTrackedSpO2Data>(decodedDataString).let {
+                    Intent().also { intent ->
+                        intent.action = ACTION_HEALTH_DATA_SPO2_UPDATE
+                        intent.putExtra(EXTRA_HEALTH_DATA, it.sPo2)
+                        intent.putExtra(EXTRA_IS_ABNORMAL, it.abnormal)
+                        sendBroadcast(intent)
+                    }
+                }
             }
         }
     }

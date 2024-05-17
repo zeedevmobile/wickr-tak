@@ -16,7 +16,7 @@ import com.atakmap.android.wickr.plugin.R
 import com.atakmap.android.wickr.plugin.activity.AlertActivity.Companion.EXTRA_EVENT_TYPE
 import com.atakmap.android.wickr.plugin.tracking.SpO2Status
 import com.google.android.material.progressindicator.CircularProgressIndicator
-import com.zeedev.utilities.extensions.getSerializableExtraCompat
+import com.atakmap.android.wickr.plugin.utilities.getSerializableExtraCompat
 
 class MainActivity : ComponentActivity() {
 
@@ -34,8 +34,8 @@ class MainActivity : ComponentActivity() {
                 val alertType: AlertActivity.AlertType =
                     result.data?.getSerializableExtraCompat(EXTRA_EVENT_TYPE)!!
                 when (alertType) {
-                    AlertActivity.AlertType.HEART_RATE -> viewModel.sendHrAlert()
-                    AlertActivity.AlertType.SPO2 -> viewModel.sendSpO2Alert()
+                    AlertActivity.AlertType.HEART_RATE -> viewModel.sendHrData(83, false)
+                    AlertActivity.AlertType.SPO2 -> viewModel.sendSpO2Data(98, false)
                 }
             }
         }
@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
 
         findViewById<Button>(R.id.button_alert_hr).apply {
             setOnClickListener {
-                viewModel.sendHrAlert()
+                viewModel.sendHrData(174, true)
                 Intent(this@MainActivity, AlertActivity::class.java).let {
                     it.putExtra(EXTRA_EVENT_TYPE, AlertActivity.AlertType.HEART_RATE)
                     resultLauncher.launch(it)
@@ -66,7 +66,7 @@ class MainActivity : ComponentActivity() {
 
         findViewById<Button>(R.id.button_alert_o2)?.apply {
             setOnClickListener {
-                viewModel.sendSpO2Alert()
+                viewModel.sendSpO2Data(84, true)
                 Intent(this@MainActivity, AlertActivity::class.java).let {
                     it.putExtra(EXTRA_EVENT_TYPE, AlertActivity.AlertType.SPO2)
                     resultLauncher.launch(it)

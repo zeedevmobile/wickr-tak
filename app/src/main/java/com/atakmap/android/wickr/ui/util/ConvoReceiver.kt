@@ -1,11 +1,14 @@
 package com.atakmap.android.wickr.ui.util
 
 import android.app.Activity
+import android.util.Log
 import com.atakmap.android.maps.MapView
-import com.atakmap.android.wickr.*
-import com.atakmap.android.wickr.ui.WickrSendFileAction
+import com.atakmap.android.wickr.WickrAPIPairedEvent
+import com.atakmap.android.wickr.WickrAPIUnpairedEvent
+import com.atakmap.android.wickr.WickrConvoListEvent
+import com.atakmap.android.wickr.WickrConvoUpdateEvent
+import com.atakmap.android.wickr.WickrUserAvatarUpdateEvent
 import com.atakmap.android.wickr.ui.adapters.WickrConvoAdapter
-import com.atakmap.map.AtakMapController
 import com.wickr.android.api.WickrAPIObjects
 import org.greenrobot.eventbus.Subscribe
 
@@ -18,6 +21,7 @@ class ConvoReceiver(private val adapter: WickrConvoAdapter, private val convoTyp
 
         when (event) {
             is WickrConvoListEvent -> mapActivity?.runOnUiThread {
+                Log.d("XXXXX", "WickrConvoListEvent")
                 if (event.identifier == convoType.name) adapter.setItems(event.convos)
             }
             is WickrConvoUpdateEvent -> mapActivity?.runOnUiThread {

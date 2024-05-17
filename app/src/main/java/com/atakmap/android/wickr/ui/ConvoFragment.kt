@@ -1,7 +1,9 @@
 package com.atakmap.android.wickr.ui
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.PorterDuff
 import android.net.Uri
 import android.os.Bundle
@@ -17,9 +19,22 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.atakmap.android.ipc.AtakBroadcast
 import com.atakmap.android.maps.MapView
-import com.atakmap.android.wickr.*
+import com.atakmap.android.wickr.PopFragmentEvent
+import com.atakmap.android.wickr.RequestCloseDropDownEvent
+import com.atakmap.android.wickr.Requests
+import com.atakmap.android.wickr.RoomOrGroupDetailsEvent
+import com.atakmap.android.wickr.SendFileInlineFragmentEvent
+import com.atakmap.android.wickr.SendVoiceMessageFragmentEvent
+import com.atakmap.android.wickr.WickrConvoEditEvent
+import com.atakmap.android.wickr.WickrConvoUpdateEvent
+import com.atakmap.android.wickr.WickrMapComponent
+import com.atakmap.android.wickr.WickrMessageListEvent
+import com.atakmap.android.wickr.WickrMessageSendEvent
+import com.atakmap.android.wickr.WickrMessageUpdateResponse
+import com.atakmap.android.wickr.common.TrackedHealthData
 import com.atakmap.android.wickr.plugin.R
 import com.atakmap.android.wickr.plugin.WickrTool
+import com.atakmap.android.wickr.service.HealthWearListenerService
 import com.atakmap.android.wickr.ui.adapters.MessageClickListener
 import com.atakmap.android.wickr.ui.adapters.WickrMessageAdapter
 import com.atakmap.android.wickr.ui.util.FileUtils
@@ -27,11 +42,18 @@ import com.atakmap.android.wickr.utils.SettingsManager
 import com.wickr.android.api.WickrAPI
 import com.wickr.android.api.WickrAPIObjects
 import com.wickr.android.api.WickrAPIRequests
-import kotlinx.android.synthetic.main.conversation_view.*
-import kotlinx.android.synthetic.main.convo_management.*
-import kotlinx.android.synthetic.main.item_wickr_message.*
+import kotlinx.android.synthetic.main.conversation_view.back_ib
+import kotlinx.android.synthetic.main.conversation_view.call_ib
+import kotlinx.android.synthetic.main.conversation_view.conversationName_tv
+import kotlinx.android.synthetic.main.conversation_view.fileUploadButton
+import kotlinx.android.synthetic.main.conversation_view.messageList
+import kotlinx.android.synthetic.main.conversation_view.messageText
+import kotlinx.android.synthetic.main.conversation_view.moreInfo
+import kotlinx.android.synthetic.main.conversation_view.send_ib
+import kotlinx.android.synthetic.main.conversation_view.voiceMessage
+import kotlinx.serialization.json.Json
 import org.greenrobot.eventbus.Subscribe
-import java.util.*
+import java.util.Timer
 import kotlin.concurrent.timerTask
 
 
@@ -174,6 +196,10 @@ class ConvoFragment(
                 WickrMapComponent.EVENTBUS.post(PopFragmentEvent())
             }
         })
+
+        requireContext().registerReceiver(
+            broadcastReceiver, IntentFilter(HealthWearListenerService.ACTION_HEALTH_DATA_MESSAGE)
+        )
     }
 
     override fun onStart() {
@@ -204,10 +230,12 @@ class ConvoFragment(
             is WickrMessageListEvent -> {
                 messageList.post { adapter.addOrUpdateItems(event.messages) }
             }
+
             is WickrMessageUpdateResponse -> if (event.convoID == convo?.id) {
                 messageList.post { adapter.addOrUpdateItems(event.message) }
                 messageList.scrollToPosition(adapter.getItemPos(event.message))
             }
+
             is WickrConvoEditEvent -> if (event.convo.id == convo?.id) {
                 if (event.convo.deleted) WickrMapComponent.EVENTBUS.post(PopFragmentEvent())
                 else {
@@ -220,6 +248,7 @@ class ConvoFragment(
                     if (!shouldNotPop) WickrMapComponent.EVENTBUS.post(PopFragmentEvent())
                 }
             }
+
             is WickrConvoUpdateEvent -> if (event.convo.id == convo?.id) {
                 // NOTE: Re-download file otherwise fail to get permission to file
                 if (event.convo.lastVisibleMessage.fileMessage.state == WickrAPIObjects.WickrMessage.FileMessage.FileState.AVAILABLE) {
@@ -285,9 +314,11 @@ class ConvoFragment(
                 ).show()
                 requests.transferFile(messageID, fileMessage)
             }
+
             WickrAPIObjects.WickrMessage.FileMessage.FileState.NEEDS_DOWNLOAD -> {
                 requests.transferFile(messageID, fileMessage)
             }
+
             WickrAPIObjects.WickrMessage.FileMessage.FileState.AVAILABLE -> {
                 val uri = Uri.parse(fileMessage.uri)
                 val fileUtils = FileUtils()
@@ -348,7 +379,40 @@ class ConvoFragment(
                     convo!!.burnOnRead
                 )
             }"
+
             else -> "Expires in ${convertTime(convo!!.expiration)}"
+        }
+    }
+
+    private val broadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(contxt: Context?, intent: Intent?) {
+            if (intent?.action == HealthWearListenerService.ACTION_HEALTH_DATA_MESSAGE) {
+                intent.getStringExtra(HealthWearListenerService.EXTRA_HEALTH_DATA)?.let { data ->
+                    decodeString(data)?.let {
+
+                        if (it.hrAlert != null) {
+                            requests.sendTextMessage(
+                                "Automated Alert: Heart rate - ${it.hr}",
+                                convo?.id ?: ""
+                            )
+                        }
+                        else if (it.spO2Alert != null) {
+                            requests.sendTextMessage(
+                                "Automated Alert: SpO2 - ${it.spO2}",
+                                convo?.id ?: ""
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun decodeString(data: String): TrackedHealthData? {
+        return try {
+            Json.decodeFromString<TrackedHealthData>(data)
+        } catch (exception: Error) {
+            null
         }
     }
 }
